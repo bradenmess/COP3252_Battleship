@@ -1,3 +1,5 @@
+import java.util.Random;
+
 public class OceanBoard extends Battleship_Game
 {
 
@@ -14,6 +16,24 @@ public class OceanBoard extends Battleship_Game
 		}
 	}
 
+	public placeShips()
+	{
+
+		 randomNumber = new Random().nextInt(10);
+
+		 sys.println(randomNumber);
+		 
+		// going to randomly place 5 ships in this function
+		// of SIZES (2,3,4,5,6)
+
+		ship twoHP(5,0);
+		ship threeHP(5,0);
+		ship fourHP(5,0);
+		ship fiveHP(5,0);
+		ship sixHP(5,0);
+
+	}
+
 	public static void displayOcean()
 	{
 		for(int i = 0; i<= 9; i++)
@@ -27,8 +47,9 @@ public class OceanBoard extends Battleship_Game
 
 			}
 		}
-
 	}
+
+	
 
 
 
