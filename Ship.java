@@ -4,7 +4,8 @@ public abstract class Ship
 	int maxHealth;		// holds the ship's maximum health
 	int currentHealth;
 	int size;		// holds the ship's size (3,4,5)
-	boolean isHoriz;	// boolean thats true if the ship is placed horizontally False if Vertical
+	boolean isHoriz;	// boolean thats true if the ship is placed horizontally
+	boolean isVertical;	// boolean thats true if the ship is placed vertically
 
 
 	public void setShip(int maxHP,int shipOrientation,int xLocation, int yLocation)		// Constructor for any ship
@@ -30,14 +31,14 @@ public abstract class Ship
 		{
 			for (int i=xLocation; i < xLocation + maxHP; i++)		// Put a placeholder for the ship
 			{
-				OceanBoard[i][yLocation] = '$';
+				player1Ocean[i][yLocation] = '$';
 			}
 		}
 		else if (!isHoriz) 
 		{
 			for (int i=yLocation; i < yLocation + maxHP; i++)		// Put a placeholder for the ship
 			{
-				OceanBoard[xLocation][i] = '$';
+				player1Ocean[xLocation][i] = '$';
 			}
 		}
 

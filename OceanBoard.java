@@ -16,7 +16,7 @@ public class OceanBoard extends Battleship_Game
 		}
 	}
 
-public void placeShips()
+	public void placeShips()
     {
 
     // going to randomly place 5 ships in this function
@@ -89,7 +89,7 @@ public void placeShips()
         }
 
             // THIS CONSTRUCTOR PLACES SHIP IN OCEANBOARD
-            Ship fourHP = new Ship();
+            Ship fiveHP = new Ship();
             fiveHP.setShip(5, orientation, xCoordinate, yCoordinate);
 
 	// BUILD 6HP SHIP
@@ -112,7 +112,7 @@ public void placeShips()
     }
 
 
-	public boolean checkShip(int size,int shipOrientation,int xLocation, int yLocation)
+	public boolean checkShip(int size,int shipOrientation,int xCoordinate, int yCoordinate)
 	{
 
 		// NEED TO CHECK P1 BOARD INCLUDE OPTION IN CONSTRUCTOR TO PICK BETWEEN PLAYERS
