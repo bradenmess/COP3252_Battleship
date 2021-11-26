@@ -7,21 +7,36 @@ public abstract class Ship
 	boolean isHoriz;	// boolean thats true if the ship is placed horizontally
 	boolean isVertical;	// boolean thats true if the ship is placed vertically
 
-	Ship(int maxHealth,int shipOrientation)		// Constructor for any ship
+	Ship(int maxHP,int shipOrientation,int xLocation, int yLocation)		// Constructor for any ship
 	{
-		maxHealth = x;
-		currentHealth = x;
+		maxHealth = maxHP;
+		currentHealth = maxHP;
 
-		if (shipOrientation == 0)  	// if 0 is passed then orientation is horizontal if 1 is passed orientation is vertical
+		size = maxHP;
+
+		if (shipOrientation == 0)  	// 0 is passed then orientation is horizontal
 		{
 			isHoriz = true;
 			isVertical = false;
+
+			for (int i=xLocation; i < xLocation + maxHP; i++)		// Put a placeholder for the ship
+			{
+				OceanBoard[i][yLocation] = '$';
+			}
+
 		}
-		else if (shipOrientation == 1)
+		else if (shipOrientation == 1) // 1 is passed orientation is vertical
 		{
 			isHoriz = false;
 			isVertical = true;
+
+			for (int i=yLocation; i < yLocation + maxHP; i++)		// Put a placeholder for the ship
+			{
+				OceanBoard[xLocation][i] = '$';
+			}
 		}
+
+
 	}
 
 

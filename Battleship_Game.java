@@ -81,6 +81,8 @@ public class Battleship_Game
 	{
 		OceanBoard gameBoard = new OceanBoard();
 
+		gameBoard.placeShips();
+
 		display_Board(gameBoard.player1Ocean);
 
 		
