@@ -16,73 +16,109 @@ public class OceanBoard extends Battleship_Game
 		}
 	}
 
-	public placeShips()
-	{
+public void placeShips()
+    {
+
+    // going to randomly place 5 ships in this function
+    // of SIZES (2,3,4,5,6)
+
+    // CONSTRUCTOR FOR SHIP Ship(int maxHP,int shipOrientation,int xLocation, int yLocation)
+
+    // BUILDING 2HP SHIP
+
+    int xCoordinate = new Random().nextInt(10);
+    int yCoordinate = new Random().nextInt(10);
+    int orientation = new Random().nextInt(1);
+
+    while (!checkShip(2,orientation,xCoordinate,yCoordinate))
+        {
+            xCoordinate = new Random().nextInt(10);
+            yCoordinate = new Random().nextInt(10);
+            orientation = new Random().nextInt(1);
+        }
+            // THIS CONSTRUCTOR PLACES SHIP IN OCEANBOARD
+
+            Ship twoHP = new Ship();
+            twoHP.setShip(2, orientation, xCoordinate, yCoordinate);
+
+    // BUILD 3HP SHIP
+
+    xCoordinate = new Random().nextInt(10);
+    yCoordinate = new Random().nextInt(10);
+    orientation = new Random().nextInt(1);
+
+    while (!checkShip(3,orientation,xCoordinate,yCoordinate))
+        {
+            xCoordinate = new Random().nextInt(10);
+            yCoordinate = new Random().nextInt(10);
+            orientation = new Random().nextInt(1);
+        }
+            // THIS CONSTRUCTOR PLACES SHIP IN OCEANBOARD
+            Ship threeHP = new Ship();
+            threeHP.setShip(3, orientation, xCoordinate, yCoordinate);      
 
 
-// going to randomly place 5 ships in this function
-// of SIZES (2,3,4,5,6)
+    // BUILD 4HP SHIP
 
-// CONSTRUCTOR FOR SHIP Ship(int maxHP,int shipOrientation,int xLocation, int yLocation)
+    xCoordinate = new Random().nextInt(10);
+    yCoordinate = new Random().nextInt(10);
+    orientation = new Random().nextInt(1);
 
+    while (!checkShip(4,orientation,xCoordinate,yCoordinate))
+        {
+            xCoordinate = new Random().nextInt(10);
+            yCoordinate = new Random().nextInt(10);
+            orientation = new Random().nextInt(1);
+        }
 
+            // THIS CONSTRUCTOR PLACES SHIP IN OCEANBOARD
+            Ship fourHP = new Ship();
+            fourHP.setShip(4, orientation, xCoordinate, yCoordinate);
 
-// BUILDING 2HP SHIP
+	// BUILD 5HP SHIP
 
-	xCoordinate = new Random().nextInt(10);
-	yCoordinate = new Random().nextInt(10);
-	orientation = new Random().nextInt(1);
+    xCoordinate = new Random().nextInt(10);
+    yCoordinate = new Random().nextInt(10);
+    orientation = new Random().nextInt(1);
 
-	while (!checkShip(2,orientation,xCoordinate,yCoordinate))
-		{
-			xCoordinate = new Random().nextInt(10);
-			yCoordinate = new Random().nextInt(10);
-			orientation = new Random().nextInt(1);
-		}
-			// THIS CONSTRUCTOR PLACES SHIP IN OCEANBOARD
-			Ship twoHP(2,orientation,xCoordinate,yCoordinate);
+    while (!checkShip(5,orientation,xCoordinate,yCoordinate))
+        {
+            xCoordinate = new Random().nextInt(10);
+            yCoordinate = new Random().nextInt(10);
+            orientation = new Random().nextInt(1);
+        }
 
+            // THIS CONSTRUCTOR PLACES SHIP IN OCEANBOARD
+            Ship fourHP = new Ship();
+            fiveHP.setShip(5, orientation, xCoordinate, yCoordinate);
 
-// BUILD 3HP SHIP
+	// BUILD 6HP SHIP
 
-xCoordinate = new Random().nextInt(10);
-yCoordinate = new Random().nextInt(10);
-orientation = new Random().nextInt(1);
+    xCoordinate = new Random().nextInt(10);
+    yCoordinate = new Random().nextInt(10);
+    orientation = new Random().nextInt(1);
 
-	while (!checkShip(3,orientation,xCoordinate,yCoordinate))
-		{
-			xCoordinate = new Random().nextInt(10);
-			yCoordinate = new Random().nextInt(10);
-			orientation = new Random().nextInt(1);
-		}
-			// THIS CONSTRUCTOR PLACES SHIP IN OCEANBOARD
-			Ship threeHP(3,orientation,xCoordinate,yCoordinate);		
+    while (!checkShip(6,orientation,xCoordinate,yCoordinate))
+        {
+            xCoordinate = new Random().nextInt(10);
+            yCoordinate = new Random().nextInt(10);
+            orientation = new Random().nextInt(1);
+        }
 
+            // THIS CONSTRUCTOR PLACES SHIP IN OCEANBOARD
+            Ship sixHP = new Ship();
+            sixHP.setShip(6, orientation, xCoordinate, yCoordinate);			
 
-// BUILD 4HP SHIP
-
-xCoordinate = new Random().nextInt(10);
-yCoordinate = new Random().nextInt(10);
-orientation = new Random().nextInt(1);
-
-	while (!checkShip(4,orientation,xCoordinate,yCoordinate))
-		{
-			xCoordinate = new Random().nextInt(10);
-			yCoordinate = new Random().nextInt(10);
-			orientation = new Random().nextInt(1);
-		}
-		
-			Ship fourHP(4,orientation,xCoordinate,yCoordinate);	
-
-	}
+    }
 
 
 	public boolean checkShip(int size,int shipOrientation,int xLocation, int yLocation)
 	{
 
-		if ( ocean[s.xCoordinate][s.yCoordinate] == '$')
-				return false;
+		// NEED TO CHECK P1 BOARD INCLUDE OPTION IN CONSTRUCTOR TO PICK BETWEEN PLAYERS
 
+		if ( player1Ocean[xCoordinate][yCoordinate] == '$')
+				return false;
 
 		if (shipOrientation == 0) // HORIZONTAL CHECK
 		{
@@ -93,7 +129,7 @@ orientation = new Random().nextInt(1);
 
 			for (int i = xCoordinate; i >= 0; i--)	
 			{
-				if ( ocean[i][yCoordinate] == '$')	// CHECK IF SHIP IS ALR IN THE LOCATION
+				if ( player1Ocean[i][yCoordinate] == '$')	// CHECK IF SHIP IS ALR IN THE LOCATION
 					return false;
 			}
 		}
@@ -106,12 +142,12 @@ orientation = new Random().nextInt(1);
 			
 			for (int i = yCoordinate; i >= 0; i--)	
 			{
-				if ( ocean[xCoordinate][i] == '$')	// CHECK IF SHIP IS ALR IN THE LOCATION
+				if ( player1Ocean[xCoordinate][i] == '$')	// CHECK IF SHIP IS ALR IN THE LOCATION
 					return false;
 			}
 		}
 
-		return false;
+		return true;
 
 	}
 
