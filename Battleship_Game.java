@@ -1,59 +1,239 @@
+import java.util.*;
+
 public class Battleship_Game
 {
-	public static char[][] player1Ocean;		// player 1's board (where ships can be placed)
-	public static char[][] player1Radar;		// player 1's radar (where they will fire at player 2)
-	public static char[][] player2Ocean;		// player 2's board (where ships can be placed)
-	public static char[][] player2Radar;		// player 2's radar (where they will fire at player 1)
 
+	// This function can be used to determine if a ship will be placed correctly, given the arguments of the starting row and column
+	// positions (i.e. player#Ocean[startRow][startcol]), the ending positions, the size of the ship, and the player's number
 
-	public Battleship_Game() // battleship game constructor, constructs the game NOT the ship
+	public static char[][] player1ShipBoard = new char[10][10];
+	public static char[][] player1Radar = new char[10][10];
+	public static char[][] player2ShipBoard = new char[10][10];
+	public static char[][] player2Radar = new char[10][10];
+
+	public char getBoardPiece(char[][] array, int row, int col)
 	{
-		player1Ocean = new char[10][10];
-		player1Radar = new char[10][10];
-		player2Ocean = new char[10][10];
-		player2Radar = new char[10][10];
+			return array[row][col];
+	}
 
-		for(int i = 0; i<= 9; i++)
+	public Battleship_Game()
+	{
+
+		for(int i =0; i<=9; i++)			// Where player 1 ships will live
 		{
 			for(int j = 0; j<= 9; j++)
 			{
-				player1Ocean[i][j] = '~';
+				player1ShipBoard[i][j] = '~';
 			}
-		}	
+		}
 
-
-	        for(int i = 0; i<= 9; i++)
+                for(int i =0; i<=9; i++)			// Player 1's hit/miss board
                 {
                         for(int j = 0; j<= 9; j++)
                         {
                                 player1Radar[i][j] = '~';
                         }
                 }
-
-                for(int i = 0; i<= 9; i++)
+                for(int i =0; i<=9; i++)			// Where player 2 ships will live
                 {
                         for(int j = 0; j<= 9; j++)
                         {
-                                player2Ocean[i][j] = '~';
+                                player2ShipBoard[i][j] = '~';
                         }
                 }
-
-                for(int i = 0; i<= 9; i++)
+                for(int i =0; i<=9; i++)			// Player 2's hit/miss board
                 {
                         for(int j = 0; j<= 9; j++)
                         {
                                 player2Radar[i][j] = '~';
                         }
                 }
+	
+			
+
+	}
+
+
+
+
+		// I plan on having the board pieces be as follows:
+		// 'c' for cruiser 
+		// 's' for submarine
+		// 'b' for battleship
+		// 'd' for destroyer
+		// 'C' (capitalized) for Carriers
+		// 'm' for "Missed" moves
+		// 'H' for "Hit" moves
+		// a board space is considered occupied if the board space is NOT the characer '~'
+		// when a certain ship type is hit (i.e. changing a 'C' character to an 'H' character, it will remove one health from the Carrier health.
+		// and once the carrier is down to zero health, we will implement the board spaces (whether be buttons or panels) to be colored black 
+
+
+		// For ship orientation, the left-most or top-most portion of the ship will be considered the ships 'starting location'
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+//			HERE IS THE FUNCTIONS THAT WILL CHECK IF A SHIP PLACEMENT IS VALID AND WILL PLACE THE SHIPS ON THE BOARD RANDOMLY
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+
+// RECALL FOR CHECKING THE BOUNDS THE GREATEST BOUND ON ROWS AND COLUMNS IS [row][9] and [9][col] RESPECTIVELY!!!
+
+		public boolean isValid(int row, int column, boolean isVertical, int size, int playerNum)
+		{
+			if(size == 2)
+			{
+				if(isVertical)
+				{
+					if( row>= 9)		// The ship's placement would be [row][column] = [9][col] + [10][col] ... which lies outside bounds
+						return false;
+				}
+				else
+				{
+					if( column >= 9)
+						return false;	// The ship's placement would be [row]column] = [row][9] + [row][10] ... which lies outside bounds
+				}
+			}
+			else if(size == 3)
+			{
+                                if(isVertical) 
+                                {
+                                        if( row>= 8)            // The ship's placement would be [row][column] = [8][col] + [9][col] + [10][col] ... which lies outside bounds
+                                                return false;   
+                                }
+                                else
+                                {
+                                        if( column >= 8)
+                                                return false;   // The ship's placement would be [row]column] = [row][9] + [row][10] ... which lies outside bounds
+                                }
+
+			}
+			else if(size == 4)
+			{
+                                if(isVertical) 
+                                {
+                                        if( row>= 7)            // The ship's placement would be outside bounds
+                                                return false;   
+                                }
+                                else
+                                {
+                                        if( column >= 7)
+                                                return false;   // The ship's placement would be outside bounds
+                                }
+
+			}
+			else if(size == 5)
+			{
+                                if(isVertical) 
+                                {
+                                        if( row>= 6)            // The ship's placement would be outside bounds
+                                                return false;   
+                                }
+                                else
+                                {
+                                        if( column >= 6)
+                                                return false;   // The ship's placement would be outside bounds
+                                }
+
+
+			}
+			else if(size != 2 && size != 3 && size != 4 && size != 5)			// If an incorrect size is placed inside, then obviously not valid
+				return false;
 
 	
-	}
+
+			// If none of the above is false, then so far the ship has chosen a location which would allow it to fit on the board. Thus check if the board is empty...
+
+			int numOpenSpaces = 0;
+	
+			if(isVertical)					// If the ship is placed vertically, check positions from [row][column] -> [row+size-1][column]
+			{
+				for(int i = row; i< row+size; i++)
+				{
+					if(playerNum == 1 && player1ShipBoard[i][column] == '~')
+						numOpenSpaces++;
+					if(playerNum == 2 && player2ShipBoard[i][column] == '~')
+						numOpenSpaces++;
+				}
+
+			}
+			else
+			{
+                                for(int i = column; i< column+size; i++)
+                                {
+                                        if(playerNum == 1 && player1ShipBoard[row][i] == '~')
+                                                numOpenSpaces++;
+                                        if(playerNum == 2 && player2ShipBoard[row][i] == '~')
+                                                numOpenSpaces++;
+                                }
+
+
+			}
+
+			if(numOpenSpaces == size)
+				return true;
+			else
+				return false;
+			
+
+		}
+
+
+
+		public void placeShip(int startRow, int startCol, boolean isVert, int size, int playerNum, char shipType)
+		{
+			if(isValid(startRow,startCol,isVert,size,playerNum))
+			{
+				if( playerNum == 1 && isVert)
+				{
+					for(int i = startRow; i< startRow+size; i++)
+					{
+						player1ShipBoard[i][startCol] = shipType;
+					}
+				}
+				else if (playerNum == 1 && !isVert)
+				{
+                                        for(int i = startCol; i< startCol+size; i++)
+                                        {
+                                                player1ShipBoard[startRow][i] = shipType;
+                                        }
+
+				}
+				else if (playerNum == 2 && isVert)
+				{
+                                        for(int i = startRow; i< startRow+size; i++)
+                                        {
+                                                player2ShipBoard[i][startCol] = shipType;
+                                        }
+
+				}
+				else if(playerNum == 2 && !isVert)
+				{
+                                        for(int i = startCol; i< startCol+size; i++)
+                                        {
+                                                player2ShipBoard[startRow][i] = shipType;       
+                                        }
+
+				}
+				else
+					System.out.println("An error has occured\n");
+			}
+			else
+					System.out.println("That area either lies out of bounds or is already occupied!\n");
+
+		}
+
+
+
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+//									THE FOLLOWING FUNCTION DISPLAYS THE RADAR/SHIPBOARD WHEN USED AS AN ARGUMENT
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 
 	public static void display_Board(char[][] board)
 	{
 		System.out.println();
-                System.out.println("     A   B   C   D   E   F   G   H   I   J  \n");
+                System.out.println("     0   1   2   3   4   5   6   7   8   9  \n");
 
 		for(int i = 0; i<= 9; i++)
 		{
@@ -77,15 +257,382 @@ public class Battleship_Game
 	}
 
 
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+//                                                            THE FOLLOWING FUNCTION CHECKS IF THE GAME IS WON AFTER GIVING IN THE ARGUMENTS OF TWO PLAYERS
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+	public boolean isGameWon(HPlayer playerInstance1, HPlayer playerInstance2)
+	{
+		
+		if(playerInstance1.getTotalPlayerHealth() == 0 || playerInstance2.getTotalPlayerHealth() == 0)
+			return true;
+		else
+			return false;
+
+	}
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+//								THE FOLLOWING FUNCITON RANDOMLY PLACES THE SHIPS ON THE BOARD
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
+	public void placePlayerShips(int playerInstanceNum)
+        {
+			// Placing Destroyer
+
+			Random rnd = new Random();
+			boolean randIsVertical = false;
+			int randNum = rnd.nextInt(2);
+			if(randNum == 0)
+				randIsVertical = true;	
+			int randRow = rnd.nextInt(9);
+			int randCol = rnd.nextInt(9);
+
+			if(isValid(randRow,randCol,randIsVertical,2,playerInstanceNum))
+			{
+				placeShip(randRow,randCol,randIsVertical,2,playerInstanceNum, 'd');
+			}
+			else
+			{
+				while(true)
+				{
+
+		                        randNum = rnd.nextInt(2);
+
+                        		if(randNum == 0)
+                        			randIsVertical = true;
+
+        		                randRow = rnd.nextInt(9);
+	                	        randCol = rnd.nextInt(9);
+
+					if(isValid(randRow,randCol,randIsVertical,2,playerInstanceNum))
+					{
+						placeShip(randRow,randCol,randIsVertical,2,playerInstanceNum,'d');
+						break;	
+					}
+
+				}
+			}
+
+			// Placing Additional Submarine
+
+                        randNum = rnd.nextInt(2);
+                        if(randNum == 0)
+                                randIsVertical = true;
+                        randRow = rnd.nextInt(9);
+                        randCol = rnd.nextInt(9);
+
+                        if(isValid(randRow,randCol,randIsVertical,3,playerInstanceNum))
+                        {
+                                placeShip(randRow,randCol,randIsVertical,3,playerInstanceNum, 's');
+                        }
+                        else
+                        {
+                                while(true)
+                                {
+
+                                        randNum = rnd.nextInt(2);
+
+                                        if(randNum == 0)
+                                                randIsVertical = true;
+
+                                        randRow = rnd.nextInt(9);
+                                        randCol = rnd.nextInt(9);
+
+                                        if(isValid(randRow,randCol,randIsVertical,3,playerInstanceNum))
+                                        {
+                                                placeShip(randRow,randCol,randIsVertical,3,playerInstanceNum,'s');
+                                                break;
+                                        }
+
+                                }
+                        }
+
+
+			// Placing additional Cruiser
+
+
+		 	randNum = rnd.nextInt(2);
+                        if(randNum == 0)
+                                randIsVertical = true;           
+                        randRow = rnd.nextInt(9);
+                        randCol = rnd.nextInt(9);   
+
+                        if(isValid(randRow,randCol,randIsVertical,3,playerInstanceNum))
+                        {
+                                placeShip(randRow,randCol,randIsVertical,3,playerInstanceNum, 'c');
+                        }
+                        else
+                        {                
+                                while(true)
+                                {
+
+                                        randNum = rnd.nextInt(2);
+
+                                        if(randNum == 0)
+                                                randIsVertical = true;
+
+                                        randRow = rnd.nextInt(9);
+                                        randCol = rnd.nextInt(9);
+
+                                        if(isValid(randRow,randCol,randIsVertical,3,playerInstanceNum))
+                                        {
+                                                placeShip(randRow,randCol,randIsVertical,3,playerInstanceNum,'c');
+                                                break;
+                                        }
+
+                                }
+                        }
+
+
+                        // Placing additional Battleship
+
+                        randNum = rnd.nextInt(2);
+                        if(randNum == 0)
+                                randIsVertical = true;
+                        randRow = rnd.nextInt(9);
+                        randCol = rnd.nextInt(9);
+
+                        if(isValid(randRow,randCol,randIsVertical,4,playerInstanceNum))
+                        {
+                                placeShip(randRow,randCol,randIsVertical,4,playerInstanceNum, 'b');
+                        }
+                        else
+                        {
+                                while(true)
+                                {
+
+                                        randNum = rnd.nextInt(2);
+
+                                        if(randNum == 0)
+                                                randIsVertical = true;
+
+                                        randRow = rnd.nextInt(9);
+                                        randCol = rnd.nextInt(9);
+
+                                        if(isValid(randRow,randCol,randIsVertical,4,playerInstanceNum))
+                                        {
+                                                placeShip(randRow,randCol,randIsVertical,4,playerInstanceNum,'b');
+                                                break;
+                                        }
+
+                                }
+                        }
+
+
+                        // Placing carrier
+
+                        randNum = rnd.nextInt(2);
+                        if(randNum == 0)
+                                randIsVertical = true;
+                        randRow = rnd.nextInt(9);
+                        randCol = rnd.nextInt(9);
+
+                        if(isValid(randRow,randCol,randIsVertical,5,playerInstanceNum))
+                        {
+                                placeShip(randRow,randCol,randIsVertical,5,playerInstanceNum, 'C');
+                        }
+                        else
+                        {
+                                while(true)
+                                {
+
+                                        randNum = rnd.nextInt(2);
+
+                                        if(randNum == 0)
+                                                randIsVertical = true;
+
+                                        randRow = rnd.nextInt(9);
+                                        randCol = rnd.nextInt(9);
+
+                                        if(isValid(randRow,randCol,randIsVertical,5,playerInstanceNum))
+                                        {
+                                                placeShip(randRow,randCol,randIsVertical,5,playerInstanceNum,'C');
+                                                break;
+                                        }
+
+                                }
+                        }
+
+
+               return;
+        }
+
+
+
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=          
+// MAIN MAIN MAIN MAIN  MAIN MAIN MAIN MAIN  MAIN MAIN MAIN MAIN  MAIN MAIN MAIN MAIN  MAIN MAIN MAIN MAIN  MAIN MAIN MAIN MAIN  MAIN MAIN MAIN MAIN  MAIN MAIN MAIN MAIN  MAIN MAIN MAIN MAIN
+// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=  
+
+
 	public static void main(String[] args)
 	{
-		OceanBoard gameBoard = new OceanBoard();
+		Battleship_Game game = new Battleship_Game();
 
-		gameBoard.placeShips();
+		HPlayer player1 = new HPlayer(1);
+		HPlayer player2 = new HPlayer(2);
 
-		display_Board(gameBoard.player1Ocean);
+		game.placePlayerShips(1);
+		game.placePlayerShips(2);
 
+		display_Board(player1ShipBoard);
+		display_Board(player2ShipBoard);
+		Scanner s = new Scanner(System.in);	
+	
+		while(!game.isGameWon(player1,player2))
+		{
+			System.out.println("Player 1 moves...");
+
+
+                	while(true)
+			{
+
+			        boolean loopBoolean = false;
+       	        		int rowFire = 0;
+                		int colFire = 0;
+	
+	                	System.out.println("Please enter the row you wish to fire upon: ");
+
+	                	rowFire = s.nextInt();
+
+   	                	while(rowFire > 9 || rowFire < 0 )
+        	        	{
+                	        	System.out.println("Row is out of bounds. Enter a valid row: ");
+                        		rowFire = s.nextInt();
+
+                		}
+
+                		System.out.println("Please enter the column you wish to fire upon: ");
+
+                		colFire = s.nextInt();
+ 
+              			while(colFire > 9 || colFire < 0 )
+                		{
+                        		System.out.println("Row is out of bounds. Enter a valid row: ");
+                        		colFire = s.nextInt();
+
+                		}
+			
+				if(player1Radar[rowFire][colFire] != '~')
+				{
+					System.out.println("You have already fired on that position, please select a new position...");
+					continue;
+				}
+
+				if(player2ShipBoard[rowFire][colFire] != '~')
+				{
+					System.out.println("PLAYER 1 HAS HIT A TARGET");
+					player1Radar[rowFire][colFire] = 'H';
+			
+					if(player2ShipBoard[rowFire][colFire] == 'c')
+						player2.damage('c');
+					if(player2ShipBoard[rowFire][colFire] == 'd')
+						player2.damage('d');
+					if(player2ShipBoard[rowFire][colFire] == 's')
+						player2.damage('s');
+					if(player2ShipBoard[rowFire][colFire] == 'b')
+						player2.damage('b');
+					if(player2ShipBoard[rowFire][colFire] == 'C')
+						player2.damage('C');
+	
+					break;
+				}
+				else
+				{
+					System.out.println("PLAYER 1 HAS MISSED!");
+					player1Radar[rowFire][colFire] = 'M';
+					break;
+				}
+			
+			}
+
+			display_Board(player1Radar);
+
+			if(game.isGameWon(player1,player2))
+				break;
+
+
+			System.out.println("Player 2 moves...");		
+
+
+			while(true)
+			{
+
+                               boolean loopBoolean = false;
+                                int rowFire = 0;
+                                int colFire = 0;
+
+                                System.out.println("Please enter the row you wish to fire upon: ");
+
+                                rowFire = s.nextInt();
+
+                                while(rowFire > 9 || rowFire < 0 )
+                                {
+                                        System.out.println("Row is out of bounds. Enter a valid row: ");
+                                        rowFire = s.nextInt();
+
+                                }
+
+                                System.out.println("Please enter the column you wish to fire upon: ");
+
+                                colFire = s.nextInt();
+ 
+                                while(colFire > 9 || colFire < 0 ) 
+                                {
+                                        System.out.println("Row is out of bounds. Enter a valid row: ");
+                                        colFire = s.nextInt();
+
+                                }
+
+                                if(player2Radar[rowFire][colFire] != '~')
+                                {
+                                        System.out.println("You have already fired on that position, please select a new position...");
+                                        continue;
+                                }                                
+	     	                if(player1ShipBoard[rowFire][colFire] != '~')
+                                {
+                                        System.out.println("PLAYER 2 HAS HIT A TARGET");
+                                        player2Radar[rowFire][colFire] = 'H';  
+
+                                        if(player1ShipBoard[rowFire][colFire] == 'c')
+                                                player1.damage('c');
+                                        if(player1ShipBoard[rowFire][colFire] == 'd')
+                                                player1.damage('d');
+                                        if(player1ShipBoard[rowFire][colFire] == 's')
+                                                player1.damage('s');
+                                        if(player1ShipBoard[rowFire][colFire] == 'b')
+                                                player1.damage('b');
+                                        if(player1ShipBoard[rowFire][colFire] == 'C')       
+                                                player1.damage('C');
+
+ 
+                                        break;
+                                }
+                                else
+                                {
+                                        System.out.println("PLAYER 2 HAS MISSED!");
+                                        player2Radar[rowFire][colFire] = 'M';
+                                        break;
+                                }
+
+
+			}
 		
+			display_Board(player2Radar);
+
+			System.out.println("The remaining health of player 1 is " + player1.getTotalPlayerHealth());
+			System.out.println("The remaining health of player 2 is " + player2.getTotalPlayerHealth());
+
+			
+		}
+
+		if(game.isGameWon(player1,player2))
+		{
+			if(player1.getTotalPlayerHealth() == 0)
+				System.out.println("PLAYER 2 HAS WON THE GAME");
+			else
+				System.out.println("PLAYER 1 HAS WON THE GAME");
+		}
+
 
 	}	// main class
 

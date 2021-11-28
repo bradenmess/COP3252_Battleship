@@ -1,13 +1,58 @@
-public class HPlayer extends Player
+import java.util.*;
+
+public class HPlayer extends Battleship_Game
 {
+	public int playerNum;
+	public int playerCruiserHP;
+	public int playerSubmarineHP;
+	public int playerCarrierHP;
+	public int playerBattleshipHP;
+	public int playerDestroyerHP;
 
-	public void move()
+
+	public HPlayer(int num)
 	{
-		return;
+        	playerCruiserHP = 3;
+        	playerSubmarineHP = 3;
+        	playerCarrierHP = 5;
+        	playerBattleshipHP = 4;
+        	playerDestroyerHP = 2;
+
+		playerNum = num;
 	}
 
-	public void placeShip()
+	public void setPlayerNum(int num)
 	{
-		return;
+		playerNum = num;
 	}
+	
+	public int getPlayerNum()
+	{
+		return playerNum;
+	}
+
+	public void damage(char shipType)
+	{
+		if(shipType == 'd')
+			playerDestroyerHP--;
+		if(shipType == 'c')
+			playerCruiserHP--;
+		if(shipType == 'C')
+			playerCarrierHP--;
+		if(shipType == 'b')
+			playerBattleshipHP--;
+		if(shipType == 's')
+			playerSubmarineHP--;
+	}
+
+
+	public int getTotalPlayerHealth()
+	{
+		int remainingHP = playerCruiserHP + playerSubmarineHP + playerCarrierHP + playerBattleshipHP + playerDestroyerHP;
+		
+		return remainingHP;
+	}
+
+
 }
+
