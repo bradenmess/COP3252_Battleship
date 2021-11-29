@@ -12,14 +12,9 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 
-public class Grid extends Battleship_Game implements ActionListener
+public class Grid implements ActionListener
 {
     JPanel windowContent;
     JLabel titleLabel, player1Label, player2Label;
@@ -27,113 +22,223 @@ public class Grid extends Battleship_Game implements ActionListener
     JButton player2Buttons[][];
     JPanel grid1, grid2, grid1WLabel, grid2WLabel, grids;
 
-    public void enablePlayerTurn(int playerNum)
+
+    public void removeButtonFunctionality(int playerNum)
     {
-        if(playerNum == 1)  // The 1st players turn, so make player 2's board uneditable
+        if(playerNum == 1)
         {
-            for(int i = 0; i < 10; i++)
+            for(int i = 0; i< 10 ; i++)
             {
-                for(int j = 0; j < 10; j++)
-                {
-                    if(player2Buttons[i][j].getText().equals(""))
-                        player2Buttons[i][j].setEnabled(true);
-                }
-            }
-            for(int i = 0; i< 10; i++)          // Remove the ability to fire on own board
-            {
-                for(int j = 0; j < 10; j++)
+                for(int j = 0; j< 10 ; j++)
                 {
                     player1Buttons[i][j].setEnabled(false);
                 }
             }
         }
-        else        // The 2nd players turn, so make player 1's board uneditable
+        else
         {
-            for(int i = 0; i < 10; i++)
+            for(int i = 0; i< 10 ; i++)
             {
-                for(int j = 0; j < 10; j++)
+                for(int j = 0; j< 10 ; j++)
                 {
-                    if(player1Buttons[i][j].getText().equals(""))
-                        player1Buttons[i][j].setEnabled(true);
-                }
-            }
-            for(int i = 0; i< 10; i++)          // Remove the ability to fire on own board
-            {
-                for(int j = 0; j < 10; j++)
-                {
-                    player1Buttons[i][j].setEnabled(false);
+                    player2Buttons[i][j].setEnabled(false);
                 }
             }
         }
     }
 
+    public void addButtonFunctionality(int playerNum)
+    {
+        if(playerNum == 1)
+        {
+            for(int i = 0; i< 10 ; i++)
+            {
+                for(int j = 0; j< 10 ; j++)
+                {
+                    player1Buttons[i][j].setEnabled(true);
+                }
+            }
+        }
+        else
+        {
+            for(int i = 0; i< 10 ; i++)
+            {
+                for(int j = 0; j< 10 ; j++)
+                {
+                    player2Buttons[i][j].setEnabled(true);
+                }
+            }
+        }
+    }
 
     public void actionPerformed(ActionEvent e)
     {
+
         for(int i = 0; i < 10 ; i++)
         {
             for(int j = 0; j < 10 ; j++)
             {
                 if(e.getSource() == player1Buttons[i][j])   // If a click is made on player 1's buttons (i.e player 2 fires on player 1)
                 {
-                    if(player1ShipBoard[i][j] != '~')       // The player has made a hit, ergo indicate this and make the button unclickable
+                    if(Battleship_Game.player1ShipBoard[i][j] != '~')       // The player has made a hit, ergo indicate this and make the button un-clickable
                     {
                         player1Buttons[i][j].setText("HIT");
                         player1Buttons[i][j].setEnabled(false);
                         player1Buttons[i][j].setBackground(Color.GREEN);
 
-                        if(player1ShipBoard[i][j] == 'c')
+                        if(Battleship_Game.player1ShipBoard[i][j] == 'c')   // Decrease the health of player 1's cruiser
                         {
-
+                            Battleship_Game.player1.damage('c');
                         }
-                        if(player1ShipBoard[i][j] == 'C')
+                        if(Battleship_Game.player1ShipBoard[i][j] == 'C')   // Decrease the health of player 1's Carrier
                         {
-
+                            Battleship_Game.player1.damage('C');
                         }
-                        if(player1ShipBoard[i][j] == 'd')
+                        if(Battleship_Game.player1ShipBoard[i][j] == 'd')   // Decrease the health of player 1's destroyer
                         {
-
+                            Battleship_Game.player1.damage('d');
                         }
-                        if(player1ShipBoard[i][j] == 's')
+                        if(Battleship_Game.player1ShipBoard[i][j] == 's')   // Decrease the health of player 1's submarine
                         {
-
+                            Battleship_Game.player1.damage('s');
                         }
-                        if(player1ShipBoard[i][j] == 'b')
+                        if(Battleship_Game.player1ShipBoard[i][j] == 'b')   // Decrease the health of player 1's battleship
                         {
-
+                            Battleship_Game.player1.damage('b');
                         }
+                        System.out.println("Player 1 total health is: " + Battleship_Game.player1.getTotalPlayerHealth());  // Display to the terminal the remaining player 1 health
 
+                        removeButtonFunctionality(1);   // Given player 1 button was pressed, remove button click for next turn
+                        addButtonFunctionality(2);
 
                     }
-                    else
+                    else        // Player 2 missed...
                     {
                         player1Buttons[i][j].setText("MISS");
                         player1Buttons[i][j].setBackground(Color.RED);
                         player1Buttons[i][j].setEnabled(false);
 
+                        System.out.println("Player 1 total health is: " + Battleship_Game.player1.getTotalPlayerHealth());  // Display to the terminal the remaining player 1 health
+                        removeButtonFunctionality(1);   // Given player 1 button was pressed, remove button click for next turn
+                        addButtonFunctionality(2);
                     }
                 }
                 else if(e.getSource() == player2Buttons[i][j])  // If a click is made on player 2's buttons (i.e. player 1 fires on player 2)
                 {
 
-                    if(player2ShipBoard[i][j] != '~')       // The player has made a hit, ergo indicate this and make the button unclickable
+                    if(Battleship_Game.player2ShipBoard[i][j] != '~')       // The player has made a hit, ergo indicate this and make the button unclickable
                     {
                         player2Buttons[i][j].setText("HIT");
                         player2Buttons[i][j].setEnabled(false);
                         player2Buttons[i][j].setBackground(Color.GREEN);
-                        grid1.repaint();
-                        grid2.repaint();
+
+                        if(Battleship_Game.player2ShipBoard[i][j] == 'c')   // Decrease the health of player 2's cruiser
+                        {
+                            Battleship_Game.player2.damage('c');
+                        }
+                        if(Battleship_Game.player2ShipBoard[i][j] == 'C')   // Decrease the health of player 2's Carrier
+                        {
+                            Battleship_Game.player2.damage('C');
+                        }
+                        if(Battleship_Game.player2ShipBoard[i][j] == 'd')   // Decrease the health of player 2's destroyer
+                        {
+                            Battleship_Game.player2.damage('d');
+                        }
+                        if(Battleship_Game.player2ShipBoard[i][j] == 's')   // Decrease the health of player 2's submarine
+                        {
+                            Battleship_Game.player2.damage('s');
+                        }
+                        if(Battleship_Game.player2ShipBoard[i][j] == 'b')   // Decrease the health of player 2's battleship
+                        {
+                            Battleship_Game.player2.damage('b');
+                        }
+
+                        System.out.println("Player 2 total health is: " + Battleship_Game.player2.getTotalPlayerHealth());
+                        removeButtonFunctionality(2);   // Given player 2 button was pressed, remove button click for next turn
+                        addButtonFunctionality(1);
                     }
-                    else
+                    else        // Player 1 missed...
                     {
                         player2Buttons[i][j].setText("MISS");
                         player2Buttons[i][j].setBackground(Color.RED);
                         player2Buttons[i][j].setEnabled(false);
+
+                        System.out.println("Player 2 total health is: " + Battleship_Game.player2.getTotalPlayerHealth());
+                        removeButtonFunctionality(2);   // Given player 2 button was pressed, remove button click for next turn
+                        addButtonFunctionality(1);
                     }
                 }
             }
+
+
         }
 
+        // Check sunken status of ships. Only display upon first time...
+
+        if(Battleship_Game.player1.playerCruiserHP == 0)
+        {
+            System.out.println("Player 1's cruiser has been destroyed!");
+        }
+        if(Battleship_Game.player1.playerDestroyerHP == 0)
+        {
+            System.out.println("Player 1's destroyer has been destroyed!");
+        }
+        if(Battleship_Game.player1.playerBattleshipHP == 0)
+        {
+            System.out.println("Player 1's battleship has been destroyed!");
+        }
+        if(Battleship_Game.player1.playerSubmarineHP == 0)
+        {
+            System.out.println("Player 1's submarine has been destroyed!");
+        }
+        if(Battleship_Game.player1.playerCarrierHP == 0)
+        {
+            System.out.println("Player 1's carrier has been destroyed!");
+        }
+
+        if(Battleship_Game.player2.playerCruiserHP == 0)
+        {
+            System.out.println("Player 2's cruiser has been destroyed!");
+        }
+        if(Battleship_Game.player2.playerDestroyerHP == 0)
+        {
+            System.out.println("Player 2's destroyer has been destroyed!");
+        }
+        if(Battleship_Game.player2.playerBattleshipHP == 0)
+        {
+            System.out.println("Player 2's battleship has been destroyed!");
+        }
+        if(Battleship_Game.player2.playerSubmarineHP == 0)
+        {
+            System.out.println("Player 2's submarine has been destroyed!");
+        }
+        if(Battleship_Game.player2.playerCarrierHP == 0)
+        {
+            System.out.println("Player 2's carrier has been destroyed!");
+        }
+
+        // Check game-winning conditions
+
+        if(Battleship_Game.player1.getTotalPlayerHealth() == 0 || Battleship_Game.player2.getTotalPlayerHealth() == 0)
+        {
+
+            for(int i = 0 ; i< 10; i++)
+            {
+                for(int j = 0; j< 10; j++)
+                {
+                    // Remove ability to click all buttons in game
+
+                    player1Buttons[i][j].setEnabled(false);
+                    player2Buttons[i][j].setEnabled(false);
+                }
+            }
+
+
+            if(Battleship_Game.player1.getTotalPlayerHealth() == 0)         // Player 1 lost all their health
+                System.out.println("PLAYER 2 HAS WON!");
+            else                                            // Player 2 lost all their health
+                System.out.println("PLAYER 1 HAS WON!");
+        }
     }
 
 
@@ -142,6 +247,7 @@ public class Grid extends Battleship_Game implements ActionListener
         windowContent = new JPanel();
         player1Buttons = new JButton[10][10];
         player2Buttons = new JButton[10][10];
+        JSeparator separator = new JSeparator();
 
         BoxLayout bl = new BoxLayout(windowContent, BoxLayout.Y_AXIS);
         windowContent.setLayout(bl);
@@ -182,7 +288,7 @@ public class Grid extends Battleship_Game implements ActionListener
             for (int j = 0; j < 10; j++)
             {
                 player2Buttons[i][j] = new JButton();
-                player2Buttons[i][j].setBackground(Color.RED);
+                player2Buttons[i][j].setBackground(Color.BLUE);
                 player2Buttons[i][j].addActionListener(this);
                 grid2.add(player2Buttons[i][j]);
             }

@@ -12,10 +12,24 @@ public class Battleship_Game
     public static char[][] player1Radar = new char[10][10];
     public static char[][] player2ShipBoard = new char[10][10];
     public static char[][] player2Radar = new char[10][10];
+    public static HPlayer player1 = new HPlayer(1);
+    public static HPlayer player2 = new HPlayer(2);
+    public static int totalP1Moves = 0;
+    public static int totalP2Moves = 0;
+    public static int totalMoves = totalP1Moves + totalP2Moves;
 
-    public char getBoardPiece(char[][] array, int row, int col)
+
+    public void addTotalMove(int playerNum)
     {
-        return array[row][col];
+        if(playerNum == 1)
+            totalP1Moves++;
+        else
+            totalP2Moves++;
+    }
+
+    public int getTotalMoves()
+    {
+        return totalMoves;
     }
 
     public Battleship_Game()
@@ -472,8 +486,7 @@ public class Battleship_Game
 
         Battleship_Game game = new Battleship_Game();
 
-        HPlayer player1 = new HPlayer(1);
-        HPlayer player2 = new HPlayer(2);
+
 
         game.placePlayerShips(1);
         game.placePlayerShips(2);
@@ -481,6 +494,7 @@ public class Battleship_Game
         display_Board(player1ShipBoard);
         display_Board(player2ShipBoard);
         Scanner s = new Scanner(System.in);
+
 
         while(!game.isGameWon(player1,player2))
         {
