@@ -82,6 +82,28 @@ public class Grid extends Battleship_Game implements ActionListener
                         player1Buttons[i][j].setEnabled(false);
                         player1Buttons[i][j].setBackground(Color.GREEN);
 
+                        if(player1ShipBoard[i][j] == 'c')
+                        {
+
+                        }
+                        if(player1ShipBoard[i][j] == 'C')
+                        {
+
+                        }
+                        if(player1ShipBoard[i][j] == 'd')
+                        {
+
+                        }
+                        if(player1ShipBoard[i][j] == 's')
+                        {
+
+                        }
+                        if(player1ShipBoard[i][j] == 'b')
+                        {
+
+                        }
+
+
                     }
                     else
                     {
