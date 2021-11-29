@@ -5,6 +5,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
@@ -17,13 +19,101 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class Grid 
+public class Grid extends Battleship_Game implements ActionListener
 {
     JPanel windowContent;
     JLabel titleLabel, player1Label, player2Label;
     JButton player1Buttons[][];
     JButton player2Buttons[][];
     JPanel grid1, grid2, grid1WLabel, grid2WLabel, grids;
+
+    public void enablePlayerTurn(int playerNum)
+    {
+        if(playerNum == 1)  // The 1st players turn, so make player 2's board uneditable
+        {
+            for(int i = 0; i < 10; i++)
+            {
+                for(int j = 0; j < 10; j++)
+                {
+                    if(player2Buttons[i][j].getText().equals(""))
+                        player2Buttons[i][j].setEnabled(true);
+                }
+            }
+            for(int i = 0; i< 10; i++)          // Remove the ability to fire on own board
+            {
+                for(int j = 0; j < 10; j++)
+                {
+                    player1Buttons[i][j].setEnabled(false);
+                }
+            }
+        }
+        else        // The 2nd players turn, so make player 1's board uneditable
+        {
+            for(int i = 0; i < 10; i++)
+            {
+                for(int j = 0; j < 10; j++)
+                {
+                    if(player1Buttons[i][j].getText().equals(""))
+                        player1Buttons[i][j].setEnabled(true);
+                }
+            }
+            for(int i = 0; i< 10; i++)          // Remove the ability to fire on own board
+            {
+                for(int j = 0; j < 10; j++)
+                {
+                    player1Buttons[i][j].setEnabled(false);
+                }
+            }
+        }
+    }
+
+
+    public void actionPerformed(ActionEvent e)
+    {
+        for(int i = 0; i < 10 ; i++)
+        {
+            for(int j = 0; j < 10 ; j++)
+            {
+                if(e.getSource() == player1Buttons[i][j])   // If a click is made on player 1's buttons (i.e player 2 fires on player 1)
+                {
+                    if(player1ShipBoard[i][j] != '~')       // The player has made a hit, ergo indicate this and make the button unclickable
+                    {
+                        player1Buttons[i][j].setText("HIT");
+                        player1Buttons[i][j].setEnabled(false);
+                        player1Buttons[i][j].setBackground(Color.GREEN);
+
+                    }
+                    else
+                    {
+                        player1Buttons[i][j].setText("MISS");
+                        player1Buttons[i][j].setBackground(Color.RED);
+                        player1Buttons[i][j].setEnabled(false);
+
+                    }
+                }
+                else if(e.getSource() == player2Buttons[i][j])  // If a click is made on player 2's buttons (i.e. player 1 fires on player 2)
+                {
+
+                    if(player2ShipBoard[i][j] != '~')       // The player has made a hit, ergo indicate this and make the button unclickable
+                    {
+                        player2Buttons[i][j].setText("HIT");
+                        player2Buttons[i][j].setEnabled(false);
+                        player2Buttons[i][j].setBackground(Color.GREEN);
+                        grid1.repaint();
+                        grid2.repaint();
+                    }
+                    else
+                    {
+                        player2Buttons[i][j].setText("MISS");
+                        player2Buttons[i][j].setBackground(Color.RED);
+                        player2Buttons[i][j].setEnabled(false);
+                    }
+                }
+            }
+        }
+
+    }
+
 
     public Grid()
     {
@@ -60,6 +150,7 @@ public class Grid
             {
                 player1Buttons[i][j] = new JButton();
                 player1Buttons[i][j].setBackground(Color.BLUE);
+                player1Buttons[i][j].addActionListener(this);
                 grid1.add(player1Buttons[i][j]);
             }
         }
@@ -70,6 +161,7 @@ public class Grid
             {
                 player2Buttons[i][j] = new JButton();
                 player2Buttons[i][j].setBackground(Color.RED);
+                player2Buttons[i][j].addActionListener(this);
                 grid2.add(player2Buttons[i][j]);
             }
         }
