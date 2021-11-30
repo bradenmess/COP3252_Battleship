@@ -1,6 +1,7 @@
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.BorderLayout;
@@ -13,15 +14,16 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 
 public class Grid implements ActionListener
 {
     JPanel windowContent;
-    JLabel titleLabel, player1Label, player2Label;
+    JLabel titleLabel, player1Label, player2Label, destroyer1Label, destroyer2Label, submarine1Label, submarine2Label, 
+    cruiser1Label, cruiser2Label, battleship1Label, battleship2Label, carrier1Label, carrier2Label;
     JButton player1Buttons[][];
     JButton player2Buttons[][];
     JPanel grid1, grid2, grid1WLabel, grid2WLabel, grids;
-
 
     public void removeButtonFunctionality(int playerNum)
     {
@@ -82,7 +84,7 @@ public class Grid implements ActionListener
                 {
                     if(Battleship_Game.player1ShipBoard[i][j] != '~')       // The player has made a hit, ergo indicate this and make the button un-clickable
                     {
-                        player1Buttons[i][j].setText("HIT");
+                        //player1Buttons[i][j].setText("HIT");
                         player1Buttons[i][j].setEnabled(false);
                         player1Buttons[i][j].setBackground(Color.GREEN);
 
@@ -114,7 +116,7 @@ public class Grid implements ActionListener
                     }
                     else        // Player 2 missed...
                     {
-                        player1Buttons[i][j].setText("MISS");
+                        //player1Buttons[i][j].setText("MISS");
                         player1Buttons[i][j].setBackground(Color.RED);
                         player1Buttons[i][j].setEnabled(false);
 
@@ -128,7 +130,7 @@ public class Grid implements ActionListener
 
                     if(Battleship_Game.player2ShipBoard[i][j] != '~')       // The player has made a hit, ergo indicate this and make the button unclickable
                     {
-                        player2Buttons[i][j].setText("HIT");
+                        //player2Buttons[i][j].setText("HIT");
                         player2Buttons[i][j].setEnabled(false);
                         player2Buttons[i][j].setBackground(Color.GREEN);
 
@@ -159,7 +161,7 @@ public class Grid implements ActionListener
                     }
                     else        // Player 1 missed...
                     {
-                        player2Buttons[i][j].setText("MISS");
+                        //player2Buttons[i][j].setText("MISS");
                         player2Buttons[i][j].setBackground(Color.RED);
                         player2Buttons[i][j].setEnabled(false);
 
@@ -264,8 +266,12 @@ public class Grid implements ActionListener
 
         grid1 = new JPanel();
         grid2 = new JPanel();
+        grid1.setBorder(new EmptyBorder(10, 10, 10, 10));
+        grid2.setBorder(new EmptyBorder(10, 10, 10, 10));
         grid1WLabel = new JPanel();
         grid2WLabel = new JPanel();
+        grid1WLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
+        grid2WLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
         grids = new JPanel();
 
         GridLayout gl = new GridLayout(10, 10);
@@ -294,13 +300,63 @@ public class Grid implements ActionListener
             }
         }
 
+        JLabel destroyer1Label = new JLabel("Destroyer (2)");
+        destroyer1Label.setFont(new Font("Serif", Font.PLAIN, 28));
+        destroyer1Label.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JLabel destroyer2Label = new JLabel("Destroyer (2)");
+        destroyer2Label.setFont(new Font("Serif", Font.PLAIN, 28));
+        destroyer2Label.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JLabel submarine1Label = new JLabel("Submarine (3)");
+        submarine1Label.setFont(new Font("Serif", Font.PLAIN, 28));
+        submarine1Label.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JLabel submarine2Label = new JLabel("Submarine (3)");
+        submarine2Label.setFont(new Font("Serif", Font.PLAIN, 28));
+        submarine2Label.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JLabel cruiser1Label = new JLabel("Cruiser (3)");
+        cruiser1Label.setFont(new Font("Serif", Font.PLAIN, 28));
+        cruiser1Label.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JLabel cruiser2Label = new JLabel("Cruiser (3)");
+        cruiser2Label.setFont(new Font("Serif", Font.PLAIN, 28));
+        cruiser2Label.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JLabel battleship1Label = new JLabel("Battleship (4)");
+        battleship1Label.setFont(new Font("Serif", Font.PLAIN, 28));
+        battleship1Label.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JLabel battleship2Label = new JLabel("Battleship (4)");
+        battleship2Label.setFont(new Font("Serif", Font.PLAIN, 28));
+        battleship2Label.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JLabel carrier1Label = new JLabel("Carrier (5)");
+        carrier1Label.setFont(new Font("Serif", Font.PLAIN, 28));
+        carrier1Label.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JLabel carrier2Label = new JLabel("Carrier (5)");
+        carrier2Label.setFont(new Font("Serif", Font.PLAIN, 28));
+        carrier2Label.setAlignmentX(Component.CENTER_ALIGNMENT);
+
         grid1WLabel.setLayout(new BoxLayout(grid1WLabel, BoxLayout.Y_AXIS));
         grid1WLabel.add(player1Label);
         grid1WLabel.add(grid1);
+        grid1WLabel.add(destroyer1Label);
+        grid1WLabel.add(submarine1Label);
+        grid1WLabel.add(cruiser1Label);
+        grid1WLabel.add(battleship1Label);
+        grid1WLabel.add(carrier1Label);
 
         grid2WLabel.setLayout(new BoxLayout(grid2WLabel, BoxLayout.Y_AXIS));
         grid2WLabel.add(player2Label);
         grid2WLabel.add(grid2);
+        grid2WLabel.add(destroyer2Label);
+        grid2WLabel.add(submarine2Label);
+        grid2WLabel.add(cruiser2Label);
+        grid2WLabel.add(battleship2Label);
+        grid2WLabel.add(carrier2Label);
 
         grids.setLayout(new BoxLayout(grids, BoxLayout.X_AXIS));
         grids.add(grid1WLabel);
@@ -310,6 +366,7 @@ public class Grid implements ActionListener
         JFrame frame = new JFrame("Battleship");
         frame.setContentPane(windowContent);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.pack();
         frame.setVisible(true);
     }
