@@ -1,5 +1,5 @@
-all: Battleship_Game.java Cruiser.java Destroyer.java Grid.java HPlayer.java OceanBoard.java Player.java Ship.java
-	javac Battleship_Game.java Cruiser.java Destroyer.java Grid.java HPlayer.java OceanBoard.java Player.java Ship.java
+all: Battleship_Game.java HPlayer.java Grid.java
+	javac Battleship_Game.java HPlayer.java Grid.java
 	java Battleship_Game.java
 
 clean:
