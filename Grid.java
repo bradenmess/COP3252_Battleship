@@ -1,32 +1,105 @@
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.image.BufferedImage;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+import javax.sound.sampled.Clip;
+import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
 import java.io.File;
 import java.io.IOException;
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
+import java.io.InputStream;
+import java.net.*;
 
 public class Grid implements ActionListener
 {
     JPanel windowContent;
-    JLabel titleLabel, player1Label, player2Label, destroyer1Label, destroyer2Label, submarine1Label, submarine2Label, 
-    cruiser1Label, cruiser2Label, battleship1Label, battleship2Label, carrier1Label, carrier2Label;
+    JLabel titleLabel, player1Label, player2Label;
     JButton player1Buttons[][];
     JButton player2Buttons[][];
     JPanel grid1, grid2, grid1WLabel, grid2WLabel, grids;
 
-    public void removeButtonFunctionality(int playerNum)
+    JLabel hitMissIndicator = new JLabel("AWAITING");
+    JLabel turnIndicator = new JLabel("FIRST ATTACK");
+    // ImageIcon fireImage = new ImageIcon("C:\\Users\\rgood\\IdeaProjects\\BATTLESHIP\\src\\1b34dfc0a9bf5563e0f960a24b6862db.gif");
+    // ImageIcon explosionImage = new ImageIcon("C:\\Users\\rgood\\IdeaProjects\\BATTLESHIP\\src\\giphy.gif");
+
+    public void AudioPlayer(String Pathname) throws UnsupportedAudioFileException, IOException, LineUnavailableException   // This creates the "explosion sound" when a ship is hit
     {
+        AudioInputStream audioStream = AudioSystem.getAudioInputStream(new File(Pathname));
+        Clip myClip = AudioSystem.getClip();
+        myClip.open(audioStream);
+        myClip.loop(0);
+    }
+
+    public void sunkenShip(int playerNum, char shipType)    // this function will run ONLY if a ship is determined to be sunk by the proceeding method
+    {
+        if (playerNum == 1)
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                for (int j = 0; j < 10; j++)
+                {
+                    if (Battleship_Game.player1ShipBoard[i][j] == shipType)
+                    {
+                        player1Buttons[i][j].setBackground(Color.BLACK);    // If the given ship is hit, make the buttons black
+                    }
+                }
+            }
+        }
+        else                // Do the same for player 2
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                for (int j = 0; j < 10; j++)
+                {
+                    if (Battleship_Game.player2ShipBoard[i][j] == shipType)
+                    {
+                        player2Buttons[i][j].setBackground(Color.BLACK);
+                    }
+
+                }
+            }
+        }
+
+
+    }
+
+    public void checkShipStatus(int playerNum)      // This function will check if the provided ship is sunk (i.e. the ship health is 0 for the player)
+    {
+        if(playerNum ==1)
+        {
+            if (Battleship_Game.player1.playerBattleshipHP == 0)
+                sunkenShip(1,'b');
+            if (Battleship_Game.player1.playerSubmarineHP == 0)
+                sunkenShip(1,'s');
+            if (Battleship_Game.player1.playerDestroyerHP == 0)
+                sunkenShip(1,'d');
+            if (Battleship_Game.player1.playerCruiserHP == 0)
+                sunkenShip(1,'c');
+            if (Battleship_Game.player1.playerCarrierHP == 0)
+                sunkenShip(1,'C');
+        }
+        else
+        {
+            if (Battleship_Game.player2.playerBattleshipHP == 0)
+                sunkenShip(2,'b');
+            if (Battleship_Game.player2.playerSubmarineHP == 0)
+                sunkenShip(2,'s');
+            if (Battleship_Game.player2.playerDestroyerHP == 0)
+                sunkenShip(2,'d');
+            if (Battleship_Game.player2.playerCruiserHP == 0)
+                sunkenShip(2,'c');
+            if (Battleship_Game.player2.playerCarrierHP == 0)
+                sunkenShip(2,'C');
+        }
+    }
+
+    public void removeButtonFunctionality(int playerNum)    // Used to remove a player's ability to click on one side of the board. Used to force turns
+    {                                                       // IMPORTANT NOTE: This function likewise determines which player goes first AFTER the first player fires!
         if(playerNum == 1)
         {
             for(int i = 0; i< 10 ; i++)
@@ -49,7 +122,7 @@ public class Grid implements ActionListener
         }
     }
 
-    public void addButtonFunctionality(int playerNum)
+    public void addButtonFunctionality(int playerNum)       // Used to add the ability to click buttons on one side of the board
     {
         if(playerNum == 1)
         {
@@ -57,7 +130,8 @@ public class Grid implements ActionListener
             {
                 for(int j = 0; j< 10 ; j++)
                 {
-                    player1Buttons[i][j].setEnabled(true);
+                    if(player1Buttons[i][j].getText().equals(""))       // The space is not already hit/miss
+                        player1Buttons[i][j].setEnabled(true);
                 }
             }
         }
@@ -67,7 +141,8 @@ public class Grid implements ActionListener
             {
                 for(int j = 0; j< 10 ; j++)
                 {
-                    player2Buttons[i][j].setEnabled(true);
+                    if(player2Buttons[i][j].getText().equals(""))       // The space is not already hit/miss
+                        player2Buttons[i][j].setEnabled(true);
                 }
             }
         }
@@ -76,15 +151,17 @@ public class Grid implements ActionListener
     public void actionPerformed(ActionEvent e)
     {
 
+
+
         for(int i = 0; i < 10 ; i++)
         {
             for(int j = 0; j < 10 ; j++)
             {
-                if(e.getSource() == player1Buttons[i][j])   // If a click is made on player 1's buttons (i.e player 2 fires on player 1)
+                if(e.getSource() == player1Buttons[i][j])   // If a click is made on player 1's buttons (player 2 fires on player 1)
                 {
                     if(Battleship_Game.player1ShipBoard[i][j] != '~')       // The player has made a hit, ergo indicate this and make the button un-clickable
                     {
-                        //player1Buttons[i][j].setText("HIT");
+                        player1Buttons[i][j].setText("HIT");
                         player1Buttons[i][j].setEnabled(false);
                         player1Buttons[i][j].setBackground(Color.GREEN);
 
@@ -110,27 +187,54 @@ public class Grid implements ActionListener
                         }
                         System.out.println("Player 1 total health is: " + Battleship_Game.player1.getTotalPlayerHealth());  // Display to the terminal the remaining player 1 health
 
+                        checkShipStatus(1);
                         removeButtonFunctionality(1);   // Given player 1 button was pressed, remove button click for next turn
                         addButtonFunctionality(2);
+
+                        hitMissIndicator.setText("PLAYER 2 HAS HIT PLAYER 1!");
+                        try
+                        {
+                            AudioPlayer("C:\\Users\\rgood\\IdeaProjects\\BATTLESHIP\\src\\mixkit-truck-crash-with-explosion-1616 (mp3cut.net) (1).wav");
+                        }
+                        catch(Exception ex)
+                        {
+                            System.out.println("Error Playing Audio");
+                        }
+                        turnIndicator.setText("IT IS PLAYER 1's TURN");
 
                     }
                     else        // Player 2 missed...
                     {
-                        //player1Buttons[i][j].setText("MISS");
+                        player1Buttons[i][j].setText("MISS");               // Mark as "Miss" and make button un-clickable
                         player1Buttons[i][j].setBackground(Color.RED);
                         player1Buttons[i][j].setEnabled(false);
 
-                        System.out.println("Player 1 total health is: " + Battleship_Game.player1.getTotalPlayerHealth());  // Display to the terminal the remaining player 1 health
                         removeButtonFunctionality(1);   // Given player 1 button was pressed, remove button click for next turn
                         addButtonFunctionality(2);
+                        hitMissIndicator.setText("PLAYER 2 HAS MISSED!");       // Indicate player 1 missed
+                        turnIndicator.setText("IT IS PLAYER 1's TURN");         // Indicate player 2's turn
+
+                        try                     // Play the explosion sound
+                        {
+                            AudioPlayer("C:\\Users\\rgood\\IdeaProjects\\BATTLESHIP\\src\\yt5s.com - Water Splash Sound FX 1 (320 kbps) (mp3cut.net).wav");
+                        }
+                        catch(Exception ex)
+                        {
+                            System.out.println("Error Playing Audio");
+                        }
+
+                        // System.out.println("Player 1 total health is: " + Battleship_Game.player1.getTotalPlayerHealth());  // Display to the terminal the remaining player 1 health
+                        // The above line of code is for error checking. Purpose: Display player 1's total health after firing
+
+
                     }
                 }
                 else if(e.getSource() == player2Buttons[i][j])  // If a click is made on player 2's buttons (i.e. player 1 fires on player 2)
                 {
 
-                    if(Battleship_Game.player2ShipBoard[i][j] != '~')       // The player has made a hit, ergo indicate this and make the button unclickable
+                    if(Battleship_Game.player2ShipBoard[i][j] != '~')       // The player has made a hit, ergo indicate this and make the button un-clickable
                     {
-                        //player2Buttons[i][j].setText("HIT");
+                        player2Buttons[i][j].setText("HIT");                // Mark as hit and make button un-clickable
                         player2Buttons[i][j].setEnabled(false);
                         player2Buttons[i][j].setBackground(Color.GREEN);
 
@@ -155,19 +259,49 @@ public class Grid implements ActionListener
                             Battleship_Game.player2.damage('b');
                         }
 
-                        System.out.println("Player 2 total health is: " + Battleship_Game.player2.getTotalPlayerHealth());
+                       //  System.out.println("Player 2 total health is: " + Battleship_Game.player2.getTotalPlayerHealth());
+                        checkShipStatus(2);
                         removeButtonFunctionality(2);   // Given player 2 button was pressed, remove button click for next turn
                         addButtonFunctionality(1);
+
+                        hitMissIndicator.setText("PLAYER 1 HAS HIT PLAYER 2!");     // Indicate player 2 made a hit
+                        turnIndicator.setText("IT IS PLAYER 2's TURN");             // Indicate it's player 1's turn
+
+                        try                     // Play the explosion sound
+                        {
+                            AudioPlayer("C:\\Users\\rgood\\IdeaProjects\\BATTLESHIP\\src\\mixkit-truck-crash-with-explosion-1616 (mp3cut.net) (1).wav");
+                        }
+                        catch(Exception ex)
+                        {
+                            System.out.println("Error Playing Audio");
+                        }
+
+
                     }
                     else        // Player 1 missed...
                     {
-                        //player2Buttons[i][j].setText("MISS");
+                        player2Buttons[i][j].setText("MISS");                                   // Indicate player 2 missed
                         player2Buttons[i][j].setBackground(Color.RED);
                         player2Buttons[i][j].setEnabled(false);
 
-                        System.out.println("Player 2 total health is: " + Battleship_Game.player2.getTotalPlayerHealth());
                         removeButtonFunctionality(2);   // Given player 2 button was pressed, remove button click for next turn
                         addButtonFunctionality(1);
+                        hitMissIndicator.setText("PLAYER 1 HAS MISSED!");   // Indicate that player 2 has missed
+                        turnIndicator.setText("IT IS PLAYER 2's TURN");     // Indicate it is now Player 1's turn
+
+                        try                     // Play the explosion sound
+                        {
+                            AudioPlayer("C:\\Users\\rgood\\IdeaProjects\\BATTLESHIP\\src\\yt5s.com - Water Splash Sound FX 1 (320 kbps) (mp3cut.net).wav");
+                        }
+                        catch(Exception ex)
+                        {
+                            System.out.println("Error Playing Audio");
+                        }
+
+                        // System.out.println("Player 2 total health is: " + Battleship_Game.player2.getTotalPlayerHealth());
+                        // The above line of code is for error checking. Purpose: Display player 2's total health after firing
+
+
                     }
                 }
             }
@@ -175,8 +309,11 @@ public class Grid implements ActionListener
 
         }
 
-        // Check sunken status of ships. Only display upon first time...
+        // The following lines of code were used for error-checking and can be ignored
+        // Purpose: printing to terminal when a ship has been sunk for verification
 
+        // Check sunken status of ships. Only display upon first time...
+        /*
         if(Battleship_Game.player1.playerCruiserHP == 0)
         {
             System.out.println("Player 1's cruiser has been destroyed!");
@@ -218,6 +355,9 @@ public class Grid implements ActionListener
         {
             System.out.println("Player 2's carrier has been destroyed!");
         }
+        */
+
+
 
         // Check game-winning conditions
 
@@ -237,9 +377,18 @@ public class Grid implements ActionListener
 
 
             if(Battleship_Game.player1.getTotalPlayerHealth() == 0)         // Player 1 lost all their health
-                System.out.println("PLAYER 2 HAS WON!");
-            else                                            // Player 2 lost all their health
-                System.out.println("PLAYER 1 HAS WON!");
+            {
+                // System.out.println("PLAYER 2 HAS WON!");
+                hitMissIndicator.setText("PLAYER 2 HAS WON THE GAME!");
+                turnIndicator.setText(" ");
+            }
+            else // Player 2 lost all their health
+            {
+                // System.out.println("PLAYER 1 HAS WON!");
+                hitMissIndicator.setText("PLAYER 1 HAS WON THE GAME!");
+                turnIndicator.setText(" ");
+            }
+
         }
     }
 
@@ -249,19 +398,23 @@ public class Grid implements ActionListener
         windowContent = new JPanel();
         player1Buttons = new JButton[10][10];
         player2Buttons = new JButton[10][10];
-        JSeparator separator = new JSeparator();
+
 
         BoxLayout bl = new BoxLayout(windowContent, BoxLayout.Y_AXIS);
         windowContent.setLayout(bl);
 
         titleLabel = new JLabel();
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        Font f = new Font("Impact", Font.PLAIN, 60);
+        titleLabel.setFont(f);
         titleLabel.setText("Battleship");
         windowContent.add(titleLabel, JLabel.CENTER);
 
-        player1Label = new JLabel("Player 1's Board");
+        player1Label = new JLabel("Player 1's Ocean");
+        player1Label.setFont(new Font("Impact", 0 , 30));
         player1Label.setAlignmentX(Component.CENTER_ALIGNMENT);
-        player2Label = new JLabel("Player 2's Board");
+        player2Label = new JLabel("Player 2's Ocean");
+        player2Label.setFont(new Font("Impact", 0 , 30));
         player2Label.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         grid1 = new JPanel();
@@ -276,24 +429,30 @@ public class Grid implements ActionListener
 
         GridLayout gl = new GridLayout(10, 10);
         grid1.setLayout(gl);
+
         grid2.setLayout(gl);
+
+
 
         for (int i = 0; i < 10; i++)
         {
             for (int j = 0; j < 10; j++)
             {
                 player1Buttons[i][j] = new JButton();
+                player1Buttons[i][j].setPreferredSize(new Dimension(40,40));
                 player1Buttons[i][j].setBackground(Color.BLUE);
                 player1Buttons[i][j].addActionListener(this);
                 grid1.add(player1Buttons[i][j]);
             }
         }
 
+
         for (int i = 0; i < 10; i++)
         {
             for (int j = 0; j < 10; j++)
             {
                 player2Buttons[i][j] = new JButton();
+                player2Buttons[i][j].setPreferredSize(new Dimension(40,40));
                 player2Buttons[i][j].setBackground(Color.BLUE);
                 player2Buttons[i][j].addActionListener(this);
                 grid2.add(player2Buttons[i][j]);
@@ -343,6 +502,7 @@ public class Grid implements ActionListener
         grid1WLabel.setLayout(new BoxLayout(grid1WLabel, BoxLayout.Y_AXIS));
         grid1WLabel.add(player1Label);
         grid1WLabel.add(grid1);
+
         grid1WLabel.add(destroyer1Label);
         grid1WLabel.add(submarine1Label);
         grid1WLabel.add(cruiser1Label);
@@ -352,6 +512,7 @@ public class Grid implements ActionListener
         grid2WLabel.setLayout(new BoxLayout(grid2WLabel, BoxLayout.Y_AXIS));
         grid2WLabel.add(player2Label);
         grid2WLabel.add(grid2);
+
         grid2WLabel.add(destroyer2Label);
         grid2WLabel.add(submarine2Label);
         grid2WLabel.add(cruiser2Label);
@@ -363,7 +524,18 @@ public class Grid implements ActionListener
         grids.add(grid2WLabel);
         windowContent.add(grids);
 
+
+        hitMissIndicator.setAlignmentX(Component.CENTER_ALIGNMENT);
+        hitMissIndicator.setFont(new Font("Impact", 0 , 30));
+        windowContent.add(hitMissIndicator);
+
+        turnIndicator.setAlignmentX(Component.CENTER_ALIGNMENT);
+        turnIndicator.setFont(new Font("Impact", 0 , 30));
+        windowContent.add(turnIndicator);
+
+
         JFrame frame = new JFrame("Battleship");
+        frame.setMinimumSize(new Dimension(1500,1000));
         frame.setContentPane(windowContent);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);

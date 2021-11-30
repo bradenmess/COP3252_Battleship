@@ -8,31 +8,18 @@ public class Battleship_Game
     // This function can be used to determine if a ship will be placed correctly, given the arguments of the starting row and column
     // positions (i.e. player#Ocean[startRow][startcol]), the ending positions, the size of the ship, and the player's number
 
-    public static char[][] player1ShipBoard = new char[10][10];
-    public static char[][] player1Radar = new char[10][10];
-    public static char[][] player2ShipBoard = new char[10][10];
-    public static char[][] player2Radar = new char[10][10];
-    public static HPlayer player1 = new HPlayer(1);
-    public static HPlayer player2 = new HPlayer(2);
-    public static int totalP1Moves = 0;
-    public static int totalP2Moves = 0;
+    public static char[][] player1ShipBoard = new char[10][10];         // Player 1 board where the ships will live
+    public static char[][] player1Radar = new char[10][10];             // Player 1 board where the player will fire
+    public static char[][] player2ShipBoard = new char[10][10];         // Player 2 board where the ships will live
+    public static char[][] player2Radar = new char[10][10];             // Player 2 board where the player will fire
+    public static HPlayer player1 = new HPlayer(1);                // Global player 1
+    public static HPlayer player2 = new HPlayer(2);                // Global player 2
+    public static int totalP1Moves = 0;                                 // Placeholders for number of player moves. Only utilized in Terminal-Only sessions
+    public static int totalP2Moves = 0;                                 // (i.e. for testing purposes)
     public static int totalMoves = totalP1Moves + totalP2Moves;
 
 
-    public void addTotalMove(int playerNum)
-    {
-        if(playerNum == 1)
-            totalP1Moves++;
-        else
-            totalP2Moves++;
-    }
-
-    public int getTotalMoves()
-    {
-        return totalMoves;
-    }
-
-    public Battleship_Game()
+    public Battleship_Game() // Construct the battleship game by initializing empty boards
     {
 
         for(int i =0; i<=9; i++)			// Where player 1 ships will live
@@ -70,21 +57,17 @@ public class Battleship_Game
     }
 
 
-
-
     // I plan on having the board pieces be as follows:
     // 'c' for cruiser
     // 's' for submarine
     // 'b' for battleship
     // 'd' for destroyer
     // 'C' (capitalized) for Carriers
-    // 'm' for "Missed" moves
+    // 'M' for "Missed" moves
     // 'H' for "Hit" moves
     // a board space is considered occupied if the board space is NOT the characer '~'
     // when a certain ship type is hit (i.e. changing a 'C' character to an 'H' character, it will remove one health from the Carrier health.
     // and once the carrier is down to zero health, we will implement the board spaces (whether be buttons or panels) to be colored black
-
-
     // For ship orientation, the left-most or top-most portion of the ship will be considered the ships 'starting location'
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -172,7 +155,7 @@ public class Battleship_Game
             }
 
         }
-        else
+        else                            // Do the same for [row][col] -> [row][col+size-1]
         {
             for(int i = column; i< column+size; i++)
             {
@@ -185,7 +168,7 @@ public class Battleship_Game
 
         }
 
-        if(numOpenSpaces == size)
+        if(numOpenSpaces == size)           // If there is an equal number of open spaces to the size of the ship, then space is avaailble
             return true;
         else
             return false;
@@ -197,16 +180,16 @@ public class Battleship_Game
 
     public void placeShip(int startRow, int startCol, boolean isVert, int size, int playerNum, char shipType)
     {
-        if(isValid(startRow,startCol,isVert,size,playerNum))
+        if(isValid(startRow,startCol,isVert,size,playerNum))        // If the ship is to be placed in a valid location
         {
-            if( playerNum == 1 && isVert)
+            if( playerNum == 1 && isVert)                           // If the ship is vertical, work from start location down
             {
                 for(int i = startRow; i< startRow+size; i++)
                 {
                     player1ShipBoard[i][startCol] = shipType;
                 }
             }
-            else if (playerNum == 1 && !isVert)
+            else if (playerNum == 1 && !isVert)                     // Otherwise work left to right
             {
                 for(int i = startCol; i< startCol+size; i++)
                 {
@@ -214,7 +197,7 @@ public class Battleship_Game
                 }
 
             }
-            else if (playerNum == 2 && isVert)
+            else if (playerNum == 2 && isVert)                  // Same mechanics for player 2...
             {
                 for(int i = startRow; i< startRow+size; i++)
                 {
@@ -434,7 +417,6 @@ public class Battleship_Game
             }
         }
 
-
         // Placing carrier
 
         randNum = rnd.nextInt(2);
@@ -483,18 +465,29 @@ public class Battleship_Game
     public static void main(String[] args)
     {
         Grid j = new Grid();
-
         Battleship_Game game = new Battleship_Game();
-
-
-
         game.placePlayerShips(1);
         game.placePlayerShips(2);
 
-        display_Board(player1ShipBoard);
-        display_Board(player2ShipBoard);
-        Scanner s = new Scanner(System.in);
+        display_Board(player1ShipBoard);            // This function displays the player 1 ship layout onto the terminal. Can be removed or commented out
+        display_Board(player2ShipBoard);            // This function displays the player 2 ship layout onto the terminal.
 
+
+        /*
+            NOTE: The following lines of code were utilized to check the functionality of the ship-placing functions and general
+            array mechanics behind the game. The commented-out sections can ergo be ignored. If the following lines of code are
+            not commented out, the game will still work as intended. The lines below can be utilized to likewise play the battleship
+            game using the Terminal only (but like the TicTacToe game is cumbersome).
+
+            - Ryan Goodrich
+         */
+
+
+
+
+        /*
+
+        Scanner s = new Scanner(System.in);
 
         while(!game.isGameWon(player1,player2))
         {
@@ -567,7 +560,6 @@ public class Battleship_Game
 
             if(game.isGameWon(player1,player2))
                 break;
-
 
             System.out.println("Player 2 moves...");
 
@@ -652,11 +644,12 @@ public class Battleship_Game
         }
 
 
-    }	// main class
+         */
 
 
 
 
+    }	// END main class
 
 }
 
