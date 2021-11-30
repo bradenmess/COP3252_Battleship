@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.*;
 
-public class Grid implements ActionListener
+public class Grid extends Battleship_Game implements ActionListener
 {
     JPanel windowContent;
     JLabel titleLabel, player1Label, player2Label;
@@ -24,8 +24,8 @@ public class Grid implements ActionListener
 
     JLabel hitMissIndicator = new JLabel("AWAITING");
     JLabel turnIndicator = new JLabel("FIRST ATTACK");
-    // ImageIcon fireImage = new ImageIcon("C:\\Users\\rgood\\IdeaProjects\\BATTLESHIP\\src\\1b34dfc0a9bf5563e0f960a24b6862db.gif");
-    // ImageIcon explosionImage = new ImageIcon("C:\\Users\\rgood\\IdeaProjects\\BATTLESHIP\\src\\giphy.gif");
+    // ImageIcon fireImage = new ImageIcon("");
+    // ImageIcon explosionImage = new ImageIcon("./giphy.gif");
 
     public void AudioPlayer(String Pathname) throws UnsupportedAudioFileException, IOException, LineUnavailableException   // This creates the "explosion sound" when a ship is hit
     {
@@ -194,7 +194,7 @@ public class Grid implements ActionListener
                         hitMissIndicator.setText("PLAYER 2 HAS HIT PLAYER 1!");
                         try
                         {
-                            AudioPlayer("C:\\Users\\rgood\\IdeaProjects\\BATTLESHIP\\src\\mixkit-truck-crash-with-explosion-1616 (mp3cut.net) (1).wav");
+                            AudioPlayer("./mixkit-truck-crash-with-explosion-1616 (mp3cut.net) (1).wav");
                         }
                         catch(Exception ex)
                         {
@@ -216,7 +216,7 @@ public class Grid implements ActionListener
 
                         try                     // Play the explosion sound
                         {
-                            AudioPlayer("C:\\Users\\rgood\\IdeaProjects\\BATTLESHIP\\src\\yt5s.com - Water Splash Sound FX 1 (320 kbps) (mp3cut.net).wav");
+                            AudioPlayer("./yt5s.com - Water Splash Sound FX 1 (320 kbps) (mp3cut.net).wav");
                         }
                         catch(Exception ex)
                         {
@@ -269,7 +269,7 @@ public class Grid implements ActionListener
 
                         try                     // Play the explosion sound
                         {
-                            AudioPlayer("C:\\Users\\rgood\\IdeaProjects\\BATTLESHIP\\src\\mixkit-truck-crash-with-explosion-1616 (mp3cut.net) (1).wav");
+                            AudioPlayer("./mixkit-truck-crash-with-explosion-1616 (mp3cut.net) (1).wav");
                         }
                         catch(Exception ex)
                         {
@@ -291,7 +291,7 @@ public class Grid implements ActionListener
 
                         try                     // Play the explosion sound
                         {
-                            AudioPlayer("C:\\Users\\rgood\\IdeaProjects\\BATTLESHIP\\src\\yt5s.com - Water Splash Sound FX 1 (320 kbps) (mp3cut.net).wav");
+                            AudioPlayer("./yt5s.com - Water Splash Sound FX 1 (320 kbps) (mp3cut.net).wav");
                         }
                         catch(Exception ex)
                         {

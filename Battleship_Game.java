@@ -52,7 +52,8 @@ public class Battleship_Game
             }
         }
 
-
+	placePlayerShips(1);
+	placePlayerShips(2);	
 
     }
 
@@ -464,10 +465,8 @@ public class Battleship_Game
 
     public static void main(String[] args)
     {
+	Battleship_Game game = new Battleship_Game();
         Grid j = new Grid();
-        Battleship_Game game = new Battleship_Game();
-        game.placePlayerShips(1);
-        game.placePlayerShips(2);
 
         display_Board(player1ShipBoard);            // This function displays the player 1 ship layout onto the terminal. Can be removed or commented out
         display_Board(player2ShipBoard);            // This function displays the player 2 ship layout onto the terminal.
