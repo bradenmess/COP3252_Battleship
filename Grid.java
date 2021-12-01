@@ -21,6 +21,7 @@ public class Grid extends Battleship_Game implements ActionListener
     JLabel moveStatus = new JLabel("LAST PLAYER MOVE");
     JLabel turnStatus = new JLabel("NEXT MOVE");
 
+
     public static int numOfTotalClicks;     // Used to lock one side of the board in salvo mode once the first shot is fired
 
     String localDir = System.getProperty("java.class.path")+"\\";
@@ -358,6 +359,12 @@ public class Grid extends Battleship_Game implements ActionListener
         player2Label.setFont(new Font("Impact", 0 , 30));
         player2Label.setAlignmentX(Component.CENTER_ALIGNMENT);
 
+        // Letters for Grid
+
+        //abc = new JLabel(" A    B    C    D    E    F    G    H    I    J ")
+        //abc.setFont(new Font("Impact", 0 , 30));
+        //abc.setAlignmentX(Component.CENTER_ALIGNMENT);
+
         grid1 = new JPanel();
         grid2 = new JPanel();
         grid1.setBorder(new EmptyBorder(10, 10, 10, 10));
@@ -465,6 +472,7 @@ public class Grid extends Battleship_Game implements ActionListener
 
         // Add ship sunk-status indicators
         grid1WLabel.setLayout(new BoxLayout(grid1WLabel, BoxLayout.Y_AXIS));
+        //grid1WLabel.add(abc);                //abc on grid
         grid1WLabel.add(player1Label);
         grid1WLabel.add(grid1);
         grid1WLabel.add(destroyer1Label);
@@ -476,6 +484,7 @@ public class Grid extends Battleship_Game implements ActionListener
         grid1WLabel.add(hitMissIndicator);
 
         grid2WLabel.setLayout(new BoxLayout(grid2WLabel, BoxLayout.Y_AXIS));
+        //grid1WLabel.add(abc);               //abc on grid
         grid2WLabel.add(player2Label);
         grid2WLabel.add(grid2);
         grid2WLabel.add(destroyer2Label);
