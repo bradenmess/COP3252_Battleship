@@ -5,9 +5,6 @@ import java.util.*;
 public class Battleship_Game
 {
 
-    // This function can be used to determine if a ship will be placed correctly, given the arguments of the starting row and column
-    // positions (i.e. player#Ocean[startRow][startcol]), the ending positions, the size of the ship, and the player's number
-
     public static char[][] player1ShipBoard = new char[10][10];         // Player 1 board where the ships will live
     public static char[][] player1Radar = new char[10][10];             // Player 1 board where the player will fire
     public static char[][] player2ShipBoard = new char[10][10];         // Player 2 board where the ships will live
@@ -17,6 +14,21 @@ public class Battleship_Game
     public static int totalP1Moves = 0;                                 // Placeholders for number of player moves. Only utilized in Terminal-Only sessions
     public static int totalP2Moves = 0;                                 // (i.e. for testing purposes)
     public static int totalMoves = totalP1Moves + totalP2Moves;
+
+
+    // the following variables and functions are only used in salvo mode
+
+    public static boolean salvoMode = false;
+
+    public void setModeStatus(boolean mode)
+    {
+        salvoMode = mode;
+    }
+
+    public boolean getModeStatus()
+    {
+        return salvoMode;
+    }
 
 
     public Battleship_Game() // Construct the battleship game by initializing empty boards
@@ -71,12 +83,6 @@ public class Battleship_Game
     // and once the carrier is down to zero health, we will implement the board spaces (whether be buttons or panels) to be colored black
     // For ship orientation, the left-most or top-most portion of the ship will be considered the ships 'starting location'
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//			HERE IS THE FUNCTIONS THAT WILL CHECK IF A SHIP PLACEMENT IS VALID AND WILL PLACE THE SHIPS ON THE BOARD RANDOMLY
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-
-// RECALL FOR CHECKING THE BOUNDS THE GREATEST BOUND ON ROWS AND COLUMNS IS [row][9] and [9][col] RESPECTIVELY!!!
 
     public boolean isValid(int row, int column, boolean isVertical, int size, int playerNum)
     {
@@ -139,8 +145,6 @@ public class Battleship_Game
         else if(size != 2 && size != 3 && size != 4 && size != 5)			// If an incorrect size is placed inside, then obviously not valid
             return false;
 
-
-
         // If none of the above is false, then so far the ship has chosen a location which would allow it to fit on the board. Thus check if the board is empty...
 
         int numOpenSpaces = 0;
@@ -176,7 +180,6 @@ public class Battleship_Game
 
 
     }
-
 
 
     public void placeShip(int startRow, int startCol, boolean isVert, int size, int playerNum, char shipType)
@@ -223,13 +226,6 @@ public class Battleship_Game
     }
 
 
-
-
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//									THE FOLLOWING FUNCTION DISPLAYS THE RADAR/SHIPBOARD WHEN USED AS AN ARGUMENT
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-
     public static void display_Board(char[][] board)
     {
         System.out.println();
@@ -257,10 +253,6 @@ public class Battleship_Game
     }
 
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//                                                            THE FOLLOWING FUNCTION CHECKS IF THE GAME IS WON AFTER GIVING IN THE ARGUMENTS OF TWO PLAYERS
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
     public boolean isGameWon(HPlayer playerInstance1, HPlayer playerInstance2)
     {
 
@@ -271,9 +263,6 @@ public class Battleship_Game
 
     }
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//								THE FOLLOWING FUNCTION RANDOMLY PLACES THE SHIPS ON THE BOARD
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
     public void placePlayerShips(int playerInstanceNum)
     {
@@ -458,20 +447,14 @@ public class Battleship_Game
 
 
 
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=  -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// MAIN MAIN MAIN MAIN  MAIN MAIN MAIN MAIN  MAIN MAIN MAIN MAIN  MAIN MAIN MAIN MAIN  MAIN MAIN MAIN MAIN  MAIN MAIN MAIN MAIN  MAIN MAIN MAIN MAIN  MAIN MAIN MAIN MAIN  MAIN MAIN MAIN MAIN
-// -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-
-
     public static void main(String[] args)
     {
+        // StartMenu newMenu = new StartMenu();
 	    Battleship_Game game = new Battleship_Game();
         Grid j = new Grid();
 
-        display_Board(player1ShipBoard);            // This function displays the player 1 ship layout onto the terminal. Can be removed or commented out
-        display_Board(player2ShipBoard);            // This function displays the player 2 ship layout onto the terminal.
-
-
+        // display_Board(player1ShipBoard);            // This function displays the player 1 ship layout onto the terminal. Can be removed or commented out
+        // display_Board(player2ShipBoard);            // This function displays the player 2 ship layout onto the terminal.
         /*
             NOTE: The following lines of code were utilized to check the functionality of the ship-placing functions and general
             array mechanics behind the game. The commented-out sections can ergo be ignored. If the following lines of code are
@@ -479,12 +462,7 @@ public class Battleship_Game
             game using the Terminal only (but like the TicTacToe game is cumbersome).
 
             - Ryan Goodrich
-         */
 
-
-
-
-        /*
 
         Scanner s = new Scanner(System.in);
 
@@ -644,9 +622,6 @@ public class Battleship_Game
 
 
          */
-
-
-
 
     }	// END main class
 
