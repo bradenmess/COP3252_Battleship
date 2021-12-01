@@ -465,7 +465,7 @@ public class Battleship_Game
 
     public static void main(String[] args)
     {
-	Battleship_Game game = new Battleship_Game();
+	    Battleship_Game game = new Battleship_Game();
         Grid j = new Grid();
 
         display_Board(player1ShipBoard);            // This function displays the player 1 ship layout onto the terminal. Can be removed or commented out

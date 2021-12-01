@@ -400,6 +400,26 @@ public class Grid extends Battleship_Game implements ActionListener
         player2Buttons = new JButton[10][10];
 
 
+
+        // BIG TRIPLE HIT BUTTON 
+
+        JLabel hitMsg = new JLabel("TRIPLE HIT EXPLOSION");
+        JLabel useMsg = new JLabel("1 Time Use");
+
+
+        Icon bombImage = new ImageIcon("img2.png");
+
+        JButton megaButton = new JButton(bombImage);
+
+
+
+        //JButton 
+
+
+        // BIG TRIPLE HIT ENDS HERE
+
+
+
         BoxLayout bl = new BoxLayout(windowContent, BoxLayout.Y_AXIS);
         windowContent.setLayout(bl);
 
@@ -459,45 +479,48 @@ public class Grid extends Battleship_Game implements ActionListener
             }
         }
 
+
+        // SHIP LABELS
+
         JLabel destroyer1Label = new JLabel("Destroyer (2)");
         destroyer1Label.setFont(new Font("Serif", Font.PLAIN, 28));
-        destroyer1Label.setAlignmentX(Component.CENTER_ALIGNMENT);
+        destroyer1Label.setAlignmentX(Component.RIGHT_ALIGNMENT);
 
         JLabel destroyer2Label = new JLabel("Destroyer (2)");
         destroyer2Label.setFont(new Font("Serif", Font.PLAIN, 28));
-        destroyer2Label.setAlignmentX(Component.CENTER_ALIGNMENT);
+        destroyer2Label.setAlignmentX(Component.RIGHT_ALIGNMENT);
 
         JLabel submarine1Label = new JLabel("Submarine (3)");
         submarine1Label.setFont(new Font("Serif", Font.PLAIN, 28));
-        submarine1Label.setAlignmentX(Component.CENTER_ALIGNMENT);
+        submarine1Label.setAlignmentX(Component.RIGHT_ALIGNMENT);
 
         JLabel submarine2Label = new JLabel("Submarine (3)");
         submarine2Label.setFont(new Font("Serif", Font.PLAIN, 28));
-        submarine2Label.setAlignmentX(Component.CENTER_ALIGNMENT);
+        submarine2Label.setAlignmentX(Component.RIGHT_ALIGNMENT);
 
         JLabel cruiser1Label = new JLabel("Cruiser (3)");
         cruiser1Label.setFont(new Font("Serif", Font.PLAIN, 28));
-        cruiser1Label.setAlignmentX(Component.CENTER_ALIGNMENT);
+        cruiser1Label.setAlignmentX(Component.RIGHT_ALIGNMENT);
 
         JLabel cruiser2Label = new JLabel("Cruiser (3)");
         cruiser2Label.setFont(new Font("Serif", Font.PLAIN, 28));
-        cruiser2Label.setAlignmentX(Component.CENTER_ALIGNMENT);
+        cruiser2Label.setAlignmentX(Component.RIGHT_ALIGNMENT);
 
         JLabel battleship1Label = new JLabel("Battleship (4)");
         battleship1Label.setFont(new Font("Serif", Font.PLAIN, 28));
-        battleship1Label.setAlignmentX(Component.CENTER_ALIGNMENT);
+        battleship1Label.setAlignmentX(Component.RIGHT_ALIGNMENT);
 
         JLabel battleship2Label = new JLabel("Battleship (4)");
         battleship2Label.setFont(new Font("Serif", Font.PLAIN, 28));
-        battleship2Label.setAlignmentX(Component.CENTER_ALIGNMENT);
+        battleship2Label.setAlignmentX(Component.RIGHT_ALIGNMENT);
 
         JLabel carrier1Label = new JLabel("Carrier (5)");
         carrier1Label.setFont(new Font("Serif", Font.PLAIN, 28));
-        carrier1Label.setAlignmentX(Component.CENTER_ALIGNMENT);
+        carrier1Label.setAlignmentX(Component.RIGHT_ALIGNMENT);
 
         JLabel carrier2Label = new JLabel("Carrier (5)");
         carrier2Label.setFont(new Font("Serif", Font.PLAIN, 28));
-        carrier2Label.setAlignmentX(Component.CENTER_ALIGNMENT);
+        carrier2Label.setAlignmentX(Component.RIGHT_ALIGNMENT);
 
         grid1WLabel.setLayout(new BoxLayout(grid1WLabel, BoxLayout.Y_AXIS));
         grid1WLabel.add(player1Label);
@@ -508,6 +531,33 @@ public class Grid extends Battleship_Game implements ActionListener
         grid1WLabel.add(cruiser1Label);
         grid1WLabel.add(battleship1Label);
         grid1WLabel.add(carrier1Label);
+
+
+        //
+
+        
+        hitMsg.setFont(new Font("Serif", Font.PLAIN, 28));
+        useMsg.setFont(new Font("Serif", Font.PLAIN, 28));
+
+        hitMsg.setAlignmentY(Component.BOTTOM_ALIGNMENT);
+        useMsg.setAlignmentY(Component.BOTTOM_ALIGNMENT);
+
+        hitMsg.setAlignmentX(Component.CENTER_ALIGNMENT);
+        useMsg.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        megaButton.setAlignmentY(Component.TOP_ALIGNMENT);
+        megaButton.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+
+        windowContent.add(hitMsg);
+        windowContent.add(useMsg);
+
+        //grid1WLabel.add(megaButton);
+
+
+        //
+
+
 
         grid2WLabel.setLayout(new BoxLayout(grid2WLabel, BoxLayout.Y_AXIS));
         grid2WLabel.add(player2Label);
@@ -538,7 +588,7 @@ public class Grid extends Battleship_Game implements ActionListener
         frame.setMinimumSize(new Dimension(1500,1000));
         frame.setContentPane(windowContent);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);  
         frame.pack();
         frame.setVisible(true);
     }
