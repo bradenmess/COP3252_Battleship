@@ -1,3 +1,12 @@
+// Ryan Goodrich
+// Marcelo Zapatta
+// Braden Mess
+// Dr. Amirizirtol
+// COP 3234 Advanced Java Programming
+// Date of Completion: 12/1/2021
+// BATTLESHIP PROJECT
+
+import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.*;
@@ -39,27 +48,8 @@ public class Battleship_Game
             for(int j = 0; j<= 9; j++)
             {
                 player1ShipBoard[i][j] = '~';
-            }
-        }
-
-        for(int i =0; i<=9; i++)			// Player 1's hit/miss board
-        {
-            for(int j = 0; j<= 9; j++)
-            {
                 player1Radar[i][j] = '~';
-            }
-        }
-        for(int i =0; i<=9; i++)			// Where player 2 ships will live
-        {
-            for(int j = 0; j<= 9; j++)
-            {
                 player2ShipBoard[i][j] = '~';
-            }
-        }
-        for(int i =0; i<=9; i++)			// Player 2's hit/miss board
-        {
-            for(int j = 0; j<= 9; j++)
-            {
                 player2Radar[i][j] = '~';
             }
         }
@@ -84,7 +74,7 @@ public class Battleship_Game
     // For ship orientation, the left-most or top-most portion of the ship will be considered the ships 'starting location'
 
 
-    public boolean isValid(int row, int column, boolean isVertical, int size, int playerNum)
+    public boolean isValid(int row, int column, boolean isVertical, int size, int playerNum) // Determines if ship placement is valid
     {
         if(size == 2)
         {
@@ -182,7 +172,7 @@ public class Battleship_Game
     }
 
 
-    public void placeShip(int startRow, int startCol, boolean isVert, int size, int playerNum, char shipType)
+    public void placeShip(int startRow, int startCol, boolean isVert, int size, int playerNum, char shipType)   // Places the ship on the board
     {
         if(isValid(startRow,startCol,isVert,size,playerNum))        // If the ship is to be placed in a valid location
         {
@@ -226,7 +216,7 @@ public class Battleship_Game
     }
 
 
-    public static void display_Board(char[][] board)
+    public static void display_Board(char[][] board)        // Displays the board (used for error testing)
     {
         System.out.println();
         System.out.println("     0   1   2   3   4   5   6   7   8   9  \n");
@@ -253,7 +243,7 @@ public class Battleship_Game
     }
 
 
-    public boolean isGameWon(HPlayer playerInstance1, HPlayer playerInstance2)
+    public boolean isGameWon(HPlayer playerInstance1, HPlayer playerInstance2)  // Determines if the game was won (used for error testing)
     {
 
         if(playerInstance1.getTotalPlayerHealth() == 0 || playerInstance2.getTotalPlayerHealth() == 0)
@@ -264,10 +254,9 @@ public class Battleship_Game
     }
 
 
-    public void placePlayerShips(int playerInstanceNum)
+    public void placePlayerShips(int playerInstanceNum) // The function that randomly places the ships on the board
     {
         // Placing Destroyer
-
         Random rnd = new Random();
         boolean randIsVertical = false;
         int randNum = rnd.nextInt(2);
@@ -449,12 +438,11 @@ public class Battleship_Game
 
     public static void main(String[] args)
     {
-        // StartMenu newMenu = new StartMenu();
+        StartMenu newMenu = new StartMenu();            // Instantiates the start menu
 	    Battleship_Game game = new Battleship_Game();
-        Grid j = new Grid();
 
-        display_Board(player1ShipBoard);            // This function displays the player 1 ship layout onto the terminal. Can be removed or commented out
-        display_Board(player2ShipBoard);            // This function displays the player 2 ship layout onto the terminal.
+        // display_Board(player1ShipBoard);            // This function displays the player 1 ship layout onto the terminal. Can be removed or commented out
+        // display_Board(player2ShipBoard);            // This function displays the player 2 ship layout onto the terminal.
         /*
             NOTE: The following lines of code were utilized to check the functionality of the ship-placing functions and general
             array mechanics behind the game. The commented-out sections can ergo be ignored. If the following lines of code are
@@ -618,10 +606,10 @@ public class Battleship_Game
                 System.out.println("PLAYER 2 HAS WON THE GAME");
             else
                 System.out.println("PLAYER 1 HAS WON THE GAME");
-        }*/
+        }
 
 
-         
+         */
 
     }	// END main class
 

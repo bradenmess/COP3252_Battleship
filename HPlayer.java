@@ -1,3 +1,11 @@
+// Ryan Goodrich
+// Marcelo Zapatta
+// Braden Mess
+// Dr. Amirizirtol
+// COP 3234 Advanced Java Programming
+// Date of Completion: 12/1/2021
+// BATTLESHIP PROJECT
+
 import java.util.*;
 
 public class HPlayer extends Battleship_Game {
@@ -8,32 +16,22 @@ public class HPlayer extends Battleship_Game {
     public int playerBattleshipHP;
     public int playerDestroyerHP;
 
-    // The following variables and functions are used only in Salvo Mode
-
+    // The following variables are used only in Salvo Mode
 
     public int numRemainingShips = 5;
     public int numRemainingMoves = 5;
 
-
-    public boolean canContinue()
+    public void depleteRemainingMoves() // Removes a player move in SALVO mode
     {
-        if(numRemainingMoves > 0)
-            return true;
-        else
-            return false;
+        --numRemainingMoves;
     }
 
-    public void depleteRemainingMoves()
-    {
-        numRemainingMoves--;
-    }
-
-    public void resetCurrentMoves()     // This function runs to reset the total remaining moves for the player to the number of currently remianing ships
+    public void resetCurrentMoves()     // This function runs to reset the total remaining moves for the player to the number of currently remaining ships
     {
         numRemainingMoves = numRemainingShips;
     }
 
-    public void moveNumIdentifier()       // This function will run after a player completes their turn in "Grid"
+    public void moveNumIdentifier()       // This function will run after a player completes their turn in "Grid". Identifies number of remaining moves in SALVO
     {
         // Start with total number of ships
 
@@ -61,7 +59,7 @@ public class HPlayer extends Battleship_Game {
 
     // Methods and constructors
 
-    public HPlayer(int num)
+    public HPlayer(int num)                 // Constructs an HPlayer with full health
     {
         playerCruiserHP = 3;
         playerSubmarineHP = 3;
@@ -71,17 +69,17 @@ public class HPlayer extends Battleship_Game {
         playerNum = num;
     }
 
-    public void setPlayerNum(int num)
+    public void setPlayerNum(int num)       // Sets the player number (only used in testing)
     {
         playerNum = num;
     }
 
-    public int getPlayerNum()
+    public int getPlayerNum()               // Returns the player number (only used in testing)
     {
         return playerNum;
     }
 
-    public void damage(char shipType)
+    public void damage(char shipType)       // Damages the appropriate ship when placed as an argument
     {
         if(shipType == 'd')
             playerDestroyerHP--;
@@ -95,22 +93,8 @@ public class HPlayer extends Battleship_Game {
             playerSubmarineHP--;
     }
 
-    public int getShipHealth(String shipName)
-    {
-        if (shipName == "cruiser")
-            return playerCruiserHP;
-        else if (shipName == "submarine")
-            return  playerSubmarineHP;
-        else if (shipName == "carrier")
-            return  playerCarrierHP;
-        else if (shipName == "battleship")
-            return  playerBattleshipHP;
-        else 
-            return  playerDestroyerHP;
-    }
 
-
-    public int getTotalPlayerHealth()
+    public int getTotalPlayerHealth()       // Used to return to the program the total remaining player health
     {
         int remainingHP = playerCruiserHP + playerSubmarineHP + playerCarrierHP + playerBattleshipHP + playerDestroyerHP;
 
