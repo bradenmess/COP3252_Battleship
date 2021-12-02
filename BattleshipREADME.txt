@@ -255,3 +255,13 @@ Video				Marcelo Zapata;
 
 
 
+======================================================================
+				SOURCES
+======================================================================
+
+The images and sounds were modified from their original versions with sound/image editing software, but the originals can be found at the following URL links. All rights of the images/sounds
+rest with the owner of these files and are used solely for educational purposes in designing the game.
+
+Topological Background Image in Start Menu: 			https://img.freepik.com/free-vector/topographic-contour-lines-blue-background_1017-14337.jpg?size=626&ext=jpg
+WaterExplosionSound.wav:					https://www.youtube.com/watch?v=AxvzQ386Uao&ab_channel=RyanLloyd
+ExplosionSound.wav:					https://mixkit.co/free-sound-effects/explosion/    ITEM LABELED: "TRUCK CRASH WITH EXPLOSION"
