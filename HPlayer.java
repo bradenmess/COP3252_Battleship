@@ -95,6 +95,20 @@ public class HPlayer extends Battleship_Game {
             playerSubmarineHP--;
     }
 
+    public int getShipHealth(String shipName)
+    {
+        if (shipName == "cruiser")
+            return playerCruiserHP;
+        else if (shipName == "submarine")
+            return  playerSubmarineHP;
+        else if (shipName == "carrier")
+            return  playerCarrierHP;
+        else if (shipName == "battleship")
+            return  playerBattleshipHP;
+        else 
+            return  playerDestroyerHP;
+    }
+
 
     public int getTotalPlayerHealth()
     {

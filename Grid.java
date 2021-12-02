@@ -1,6 +1,8 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.lang.model.util.ElementScanner14;
 import javax.sound.sampled.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -21,14 +23,35 @@ public class Grid extends Battleship_Game implements ActionListener
     JLabel moveStatus = new JLabel("LAST PLAYER MOVE");
     JLabel turnStatus = new JLabel("NEXT MOVE");
 
+    //
+
+    /*grid1WLabel = new JPanel();
+    grid2WLabel = new JPanel();*/
+
+    JLabel destroyer1Label = new JLabel("Destroyer (2)");
+    JLabel destroyer2Label = new JLabel("Destroyer (2)");
+
+    JLabel submarine1Label = new JLabel("Submarine (3)");
+    JLabel submarine2Label = new JLabel("Submarine (3)");
+
+    JLabel cruiser1Label = new JLabel("Cruiser (3)");
+    JLabel cruiser2Label = new JLabel("Cruiser (3)");
+
+    JLabel battleship1Label = new JLabel("Battleship (4)");
+    JLabel battleship2Label = new JLabel("Battleship (4)");
+
+    JLabel carrier1Label = new JLabel("Carrier (5)");
+    JLabel carrier2Label = new JLabel("Carrier (5)");
+
+
 
     public static int numOfTotalClicks;     // Used to lock one side of the board in salvo mode once the first shot is fired
 
     String localDir = System.getProperty("java.class.path")+"\\";
-    File waterExplosionSound = new File(localDir+"yt5s.com - Water Splash Sound FX 1 (320 kbps) (mp3cut.net).wav");
+    /*File waterExplosionSound = new File(localDir+"yt5s.com - Water Splash Sound FX 1 (320 kbps) (mp3cut.net).wav");
     File explosionSound = new File(localDir+"mixkit-truck-crash-with-explosion-1616 (mp3cut.net) (1).wav");
 
-    public void AudioPlayer(File fileName) throws UnsupportedAudioFileException, IOException, LineUnavailableException   // This creates the "explosion sound" when a ship is hit
+    /*public void AudioPlayer(File fileName) throws UnsupportedAudioFileException, IOException, LineUnavailableException   // This creates the "explosion sound" when a ship is hit
     {
         AudioInputStream audioStream = AudioSystem.getAudioInputStream(fileName);
         Clip myClip = AudioSystem.getClip();
@@ -40,6 +63,38 @@ public class Grid extends Battleship_Game implements ActionListener
                     myClip.close();
             }
         });
+    }*/
+
+    // REMOVE SHIP LABEL WHEN SHIP GOES DOWN
+
+    public void removeShipLabel(char shipType, int playerNum)
+    {
+        if (playerNum == 1)
+        {
+            if(shipType == 'c')
+                cruiser1Label.setText("Your Cruiser has Been Eliminated!");
+            else if (shipType == 's')
+                submarine1Label.setText("Your Cruiser has Been Eliminated!");
+            else if (shipType == 'C')
+                carrier1Label.setText("Your Carrier has Been Eliminated!"); 
+            else if (shipType == 'b')
+                battleship1Label.setText("Your Battleship has Been Eliminated!");
+            else if (shipType == 'd')
+                destroyer1Label.setText("Your Destroyer has Been Eliminated!"); 
+        }
+        else 
+        {
+            if(shipType == 'c')
+                cruiser2Label.setText("Your Cruiser has Been Eliminated!");
+            else if (shipType == 's')
+                submarine2Label.setText("Your Submarine has Been Eliminated!");
+            else if (shipType == 'C')
+                carrier2Label.setText("Your Carrier has Been Eliminated!"); 
+            else if (shipType == 'b')
+                battleship2Label.setText("Your Battleship has Been Eliminated!");
+            else if (shipType == 'd')
+                destroyer2Label.setText("Your Destroyer has Been Eliminated!"); 
+        }       
     }
 
     public void sunkenShip(int playerNum, char shipType)    // this function will run ONLY if a ship is determined to be sunk by the proceeding method
@@ -53,6 +108,7 @@ public class Grid extends Battleship_Game implements ActionListener
                     if (Battleship_Game.player1ShipBoard[i][j] == shipType)
                     {
                         player1Buttons[i][j].setBackground(Color.BLACK);    // If the given ship is hit, make the buttons black
+                        removeShipLabel(shipType, 1);
                     }
                 }
             }
@@ -66,6 +122,7 @@ public class Grid extends Battleship_Game implements ActionListener
                     if (Battleship_Game.player2ShipBoard[i][j] == shipType)
                     {
                         player2Buttons[i][j].setBackground(Color.BLACK);
+                        removeShipLabel(shipType, 2);
                     }
 
                 }
@@ -204,6 +261,59 @@ public class Grid extends Battleship_Game implements ActionListener
 
         }
     }
+    // CHECK WHAT SHIP WAS ATTACKED
+
+    public void damagedShipCheck(int cruiserHPtemp,int submarineHPtemp, int carrierHPtemp,int battleshipHPtemp,int destroyerHPtemp, int playerNum)     // returns what ship was attacked
+    {
+        if (playerNum == 1)
+        {
+            if(Battleship_Game.player1.getShipHealth("cruiser") != cruiserHPtemp)
+            {
+                cruiser1Label.setText("cruiser (" + Battleship_Game.player1.getShipHealth("cruiser") + ")");
+            }
+            else if (Battleship_Game.player1.getShipHealth("submarine") != submarineHPtemp)
+            {
+                submarine1Label.setText("submarine (" + Battleship_Game.player1.getShipHealth("submarine") + ")");
+            }
+            else if(Battleship_Game.player1.getShipHealth("carrier") != carrierHPtemp)
+            {
+                carrier1Label.setText("carrier (" + Battleship_Game.player1.getShipHealth("carrier") + ")");
+            }
+            else if(Battleship_Game.player1.getShipHealth("battleship") != battleshipHPtemp)
+            {
+                battleship1Label.setText("battleship (" + Battleship_Game.player1.getShipHealth("battleship") + ")");
+            }
+            else
+            {
+                destroyer1Label.setText("destroyer (" + Battleship_Game.player1.getShipHealth("destroyer") + ")");
+            }
+        }
+        else
+        {
+
+            if(Battleship_Game.player2.getShipHealth("cruiser") != cruiserHPtemp)
+            {
+                cruiser2Label.setText("cruiser (" + Battleship_Game.player2.getShipHealth("cruiser") + ")");
+            }
+            else if (Battleship_Game.player2.getShipHealth("submarine") != submarineHPtemp)
+            {
+                submarine2Label.setText("submarine (" + Battleship_Game.player2.getShipHealth("submarine") + ")");
+            }
+            else if(Battleship_Game.player2.getShipHealth("carrier") != carrierHPtemp)
+            {
+                carrier2Label.setText("carrier (" + Battleship_Game.player2.getShipHealth("carrier") + ")");
+            }
+            else if(Battleship_Game.player2.getShipHealth("battleship") != battleshipHPtemp)
+            {
+                battleship2Label.setText("battleship (" + Battleship_Game.player2.getShipHealth("battleship") + ")");
+            }
+            else
+            {
+                destroyer2Label.setText("destroyer (" + Battleship_Game.player2.getShipHealth("destroyer") + ")");
+            }
+
+        }
+    }
 
     public void actionPerformed(ActionEvent e)
     {
@@ -213,6 +323,12 @@ public class Grid extends Battleship_Game implements ActionListener
         {
             for(int j = 0; j < 10 ; j++)
             {
+                /*int cruiserHPtemp = Battleship_Game.player1.getShipHealth("cruiser");
+                int submarineHPtemp = Battleship_Game.player1.getShipHealth("submarine");
+                int carrierHPtemp = Battleship_Game.player1.getShipHealth("carrier");
+                int battleshipHPtemp = Battleship_Game.player1.getShipHealth("battleship");  
+                int destroyerHPtemp = Battleship_Game.player1.getShipHealth("destroyer");*/
+
                 if(e.getSource() == player1Buttons[i][j])   // If a click is made on player 1's buttons (player 2 fires on player 1)
                 {
                     if(numOfTotalClicks == 1)
@@ -226,6 +342,12 @@ public class Grid extends Battleship_Game implements ActionListener
                         hitMissIndicator.setText("PLAYER 2 HAS HIT PLAYER 1!");
                         turnIndicator.setText("IT IS PLAYER 1's TURN");
 
+                        //WILL DEDUCT HEALTH FROM SHIP
+
+                        //damagedShipCheck(cruiserHPtemp,submarineHPtemp,carrierHPtemp,battleshipHPtemp,destroyerHPtemp,1);
+
+                        //
+
                         if(salvoMode && Battleship_Game.player2.numRemainingMoves == 1)     // Player 2 has run out of moves upon click
                         {
                             player1.moveNumIdentifier();
@@ -235,8 +357,8 @@ public class Grid extends Battleship_Game implements ActionListener
                         else if(!salvoMode)
                             changeButtonFunctionality(1);
 
-                        try {AudioPlayer(explosionSound);}
-                        catch(Exception ex) {System.out.println("Error Playing Audio");}
+                        /*try {AudioPlayer(explosionSound);}
+                        catch(Exception ex) {System.out.println("Error Playing Audio");}*/
                     }
                     else                                                        // Player 2 missed...
                     {
@@ -255,8 +377,8 @@ public class Grid extends Battleship_Game implements ActionListener
                         else if(!salvoMode)
                             changeButtonFunctionality(1);
 
-                        try {AudioPlayer(waterExplosionSound);}
-                        catch(Exception ex) {System.out.println("Error Playing Audio");}
+                        /*try {AudioPlayer(waterExplosionSound);}
+                        catch(Exception ex) {System.out.println("Error Playing Audio");}*/
 
                     }
 
@@ -279,7 +401,6 @@ public class Grid extends Battleship_Game implements ActionListener
                         turnIndicator.setText("IT IS PLAYER 2's TURN");                   // Indicate it's player 1's turn
 
 
-
                         if(salvoMode && Battleship_Game.player1.numRemainingMoves == 1)     // Player 1 has run out of moves upon click
                         {
                             player2.moveNumIdentifier();
@@ -292,8 +413,8 @@ public class Grid extends Battleship_Game implements ActionListener
 
 
 
-                        try{AudioPlayer(explosionSound);}
-                        catch(Exception ex) {System.out.println(ex); }
+                        /*try{AudioPlayer(explosionSound);}
+                        catch(Exception ex) {System.out.println(ex); }*/
 
                     }
                     else                                                    // Player 1 missed...
@@ -316,8 +437,8 @@ public class Grid extends Battleship_Game implements ActionListener
 
 
 
-                        try { AudioPlayer(waterExplosionSound); }
-                        catch(Exception ex) {System.out.println("Error Playing Audio"); }
+                        /*try { AudioPlayer(waterExplosionSound); }
+                        catch(Exception ex) {System.out.println("Error Playing Audio"); }*/
 
                     }
 
@@ -359,17 +480,12 @@ public class Grid extends Battleship_Game implements ActionListener
         player2Label.setFont(new Font("Impact", 0 , 30));
         player2Label.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Letters for Grid
-
-        //abc = new JLabel(" A    B    C    D    E    F    G    H    I    J ")
-        //abc.setFont(new Font("Impact", 0 , 30));
-        //abc.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         grid1 = new JPanel();
         grid2 = new JPanel();
         grid1.setBorder(new EmptyBorder(10, 10, 10, 10));
         grid2.setBorder(new EmptyBorder(10, 10, 10, 10));
-        grid1WLabel = new JPanel();
+        grid1WLabel = new JPanel();   
         grid2WLabel = new JPanel();
         grid1WLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
         grid2WLabel.setBorder(new EmptyBorder(10, 10, 10, 10));
@@ -412,46 +528,49 @@ public class Grid extends Battleship_Game implements ActionListener
             }
         }
 
+        // Initialized in the begining of program
 
-        JLabel destroyer1Label = new JLabel("Destroyer (2)");
+        //JLabel destroyer1Label = new JLabel("Destroyer (2)");
         destroyer1Label.setFont(new Font("Serif", Font.PLAIN, 28));
         destroyer1Label.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JLabel destroyer2Label = new JLabel("Destroyer (2)");
+        //JLabel destroyer2Label = new JLabel("Destroyer (2)");
         destroyer2Label.setFont(new Font("Serif", Font.PLAIN, 28));
         destroyer2Label.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JLabel submarine1Label = new JLabel("Submarine (3)");
+        //JLabel submarine1Label = new JLabel("Submarine (3)");
         submarine1Label.setFont(new Font("Serif", Font.PLAIN, 28));
         submarine1Label.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JLabel submarine2Label = new JLabel("Submarine (3)");
+        //JLabel submarine2Label = new JLabel("Submarine (3)");
         submarine2Label.setFont(new Font("Serif", Font.PLAIN, 28));
         submarine2Label.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JLabel cruiser1Label = new JLabel("Cruiser (3)");
+        //JLabel cruiser1Label = new JLabel("Cruiser (3)");
         cruiser1Label.setFont(new Font("Serif", Font.PLAIN, 28));
         cruiser1Label.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JLabel cruiser2Label = new JLabel("Cruiser (3)");
+        //JLabel cruiser2Label = new JLabel("Cruiser (3)");
         cruiser2Label.setFont(new Font("Serif", Font.PLAIN, 28));
         cruiser2Label.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JLabel battleship1Label = new JLabel("Battleship (4)");
+        //JLabel battleship1Label = new JLabel("Battleship (4)");
         battleship1Label.setFont(new Font("Serif", Font.PLAIN, 28));
         battleship1Label.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JLabel battleship2Label = new JLabel("Battleship (4)");
+        //JLabel battleship2Label = new JLabel("Battleship (4)");
         battleship2Label.setFont(new Font("Serif", Font.PLAIN, 28));
         battleship2Label.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JLabel carrier1Label = new JLabel("Carrier (5)");
+        //JLabel carrier1Label = new JLabel("Carrier (5)");
         carrier1Label.setFont(new Font("Serif", Font.PLAIN, 28));
         carrier1Label.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JLabel carrier2Label = new JLabel("Carrier (5)");
+        //JLabel carrier2Label = new JLabel("Carrier (5)");
         carrier2Label.setFont(new Font("Serif", Font.PLAIN, 28));
         carrier2Label.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+
 
         // Change fonts of Board Messages!
 
@@ -472,7 +591,6 @@ public class Grid extends Battleship_Game implements ActionListener
 
         // Add ship sunk-status indicators
         grid1WLabel.setLayout(new BoxLayout(grid1WLabel, BoxLayout.Y_AXIS));
-        //grid1WLabel.add(abc);                //abc on grid
         grid1WLabel.add(player1Label);
         grid1WLabel.add(grid1);
         grid1WLabel.add(destroyer1Label);
@@ -484,7 +602,6 @@ public class Grid extends Battleship_Game implements ActionListener
         grid1WLabel.add(hitMissIndicator);
 
         grid2WLabel.setLayout(new BoxLayout(grid2WLabel, BoxLayout.Y_AXIS));
-        //grid1WLabel.add(abc);               //abc on grid
         grid2WLabel.add(player2Label);
         grid2WLabel.add(grid2);
         grid2WLabel.add(destroyer2Label);

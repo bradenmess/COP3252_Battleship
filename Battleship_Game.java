@@ -453,8 +453,8 @@ public class Battleship_Game
 	    Battleship_Game game = new Battleship_Game();
         Grid j = new Grid();
 
-        // display_Board(player1ShipBoard);            // This function displays the player 1 ship layout onto the terminal. Can be removed or commented out
-        // display_Board(player2ShipBoard);            // This function displays the player 2 ship layout onto the terminal.
+        display_Board(player1ShipBoard);            // This function displays the player 1 ship layout onto the terminal. Can be removed or commented out
+        display_Board(player2ShipBoard);            // This function displays the player 2 ship layout onto the terminal.
         /*
             NOTE: The following lines of code were utilized to check the functionality of the ship-placing functions and general
             array mechanics behind the game. The commented-out sections can ergo be ignored. If the following lines of code are
@@ -618,10 +618,10 @@ public class Battleship_Game
                 System.out.println("PLAYER 2 HAS WON THE GAME");
             else
                 System.out.println("PLAYER 1 HAS WON THE GAME");
-        }
+        }*/
 
 
-         */
+         
 
     }	// END main class
 
