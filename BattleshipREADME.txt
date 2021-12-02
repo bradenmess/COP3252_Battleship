@@ -137,7 +137,7 @@ To implement sound and/or images, we ask for the following:
 - In the "Grid" Class, seed the locations of the files absolute pathname on your local computer (i.e. C:\\ ... ). The code is designed to implement the files based on your current working directory
   but the pathname may appear different using windows C:\\ pathnames versus UNIX's ./ relative pathname
 
-With the above instructions, the sounds/images SHOULD work on your local machine as well. 
+With the above instructions, the sounds/images SHOULD work on your local machine as well (though in theory they should work regardless if you followed the aforementioned instructions)
 
 If the sounds and images do not load, all other features of the game should work as-intended/stated above.
 
